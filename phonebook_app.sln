@@ -1,0 +1,37 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 16
+VisualStudioVersion = 16.0.30406.217
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "phonebook_app", "phonebook_app\phonebook_app.csproj", "{F4F9B514-F238-4C82-A96D-10E0767E83FE}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "KafkaConnection", "KafkaConnection\KafkaConnection.csproj", "{A7500383-BCAE-4335-A471-6976736EE2D0}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "phonebook_app_read", "phonebook_app_read\phonebook_app_read.csproj", "{FF238350-387F-4159-83CB-8032BDE5516C}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{F4F9B514-F238-4C82-A96D-10E0767E83FE}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{F4F9B514-F238-4C82-A96D-10E0767E83FE}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{F4F9B514-F238-4C82-A96D-10E0767E83FE}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{F4F9B514-F238-4C82-A96D-10E0767E83FE}.Release|Any CPU.Build.0 = Release|Any CPU
+		{A7500383-BCAE-4335-A471-6976736EE2D0}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{A7500383-BCAE-4335-A471-6976736EE2D0}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{A7500383-BCAE-4335-A471-6976736EE2D0}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{A7500383-BCAE-4335-A471-6976736EE2D0}.Release|Any CPU.Build.0 = Release|Any CPU
+		{FF238350-387F-4159-83CB-8032BDE5516C}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{FF238350-387F-4159-83CB-8032BDE5516C}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{FF238350-387F-4159-83CB-8032BDE5516C}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{FF238350-387F-4159-83CB-8032BDE5516C}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {2F489FAC-49FA-401B-A4A7-C2562FCA6F9F}
+	EndGlobalSection
+EndGlobal
