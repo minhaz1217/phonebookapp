@@ -2,6 +2,7 @@
 using KafkaConnection.kafkawrapper;
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Net;
 using System.Text;
 using System.Threading;
@@ -36,7 +37,8 @@ namespace KafkaConnection.Messangerwrapper
             return $"{topic} => {message}";
         }
 
-        public IConsumer<Ignore, string> Consume(string groupId, IEnumerable<string> Topics)
+
+        public void Consume(string groupId, Dictionary<string, Action<string>> TopicCallbackDict, CancellationToken cancellationToken)
         {
             var config = new ConsumerConfig
             {
@@ -45,13 +47,30 @@ namespace KafkaConnection.Messangerwrapper
                 AutoOffsetReset = AutoOffsetReset.Earliest
             };
             //var cancellationToken = new CancellationToken();
-           
-            var consumer = new ConsumerBuilder<Ignore, string>(config).Build();
-            consumer.Subscribe(Topics);
-            return consumer;
 
-            
-            //throw new NotImplementedException();
+            var consumer = new ConsumerBuilder<Ignore, string>(config).Build();
+
+            StringBuilder sb = new StringBuilder();
+            foreach (string key in TopicCallbackDict.Keys)
+            {
+                sb.Append(key + ",");
+            }
+            sb.Remove(sb.Length - 1, 1);
+            consumer.Subscribe(sb.ToString());
+
+
+            while (!cancellationToken.IsCancellationRequested)
+            {
+                var consumeResult = consumer.Consume(cancellationToken);
+                foreach(KeyValuePair<string, Action<string> > kvp in TopicCallbackDict)
+                {
+                    if(kvp.Key == consumeResult.Topic)
+                    {
+                        kvp.Value( consumeResult.Message.Value );
+                    }
+                }
+            }
+            consumer.Close();
         }
 
         ~KafkaWrapper()

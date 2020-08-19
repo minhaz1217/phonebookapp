@@ -3,12 +3,13 @@ using System;
 using System.Collections.Concurrent;
 using System.Collections.Generic;
 using System.Text;
+using System.Threading;
 
 namespace KafkaConnection.kafkawrapper
 {
     public interface IMessangerWrapper
     {
         string Produce(string topic, string message);
-        IConsumer<Ignore, string> Consume(string groupId, IEnumerable<string> Topics);
+        void Consume(string groupId, Dictionary<string, Action<string>> TopicCallbackDict, CancellationToken cancellationToken);
     }
 }

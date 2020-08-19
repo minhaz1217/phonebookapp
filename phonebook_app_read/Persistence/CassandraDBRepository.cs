@@ -64,43 +64,54 @@ namespace phonebook_app_read.Persistence
             return true;
         }
 
-        public AuxPhonebook GetById(string id)
+        public Phonebook GetById(string id)
         {
+            //PreparedStatement ps = session.Prepare($"SELECT * FROM {Product.TABLE_NAME} where {Product.COL_ID}=?;");
+            //BoundStatement statement = ps.Bind(productId.ToString());
+            //RowSet rowSet = session.Execute(statement);
+            //foreach (Row row in rowSet)
+            //{
+            //    return CassandraMapper.DBProductMapper(row);
+            //}
             throw new NotImplementedException();
         }
 
-        public IEnumerable<AuxPhonebook> GetAllAuxPhonebook()
+        public IEnumerable<Phonebook> GetAllPhonebook(string query, params object[] args)
         {
-            IEnumerable<AuxPhonebook> auxPhonebooks= mapper.Fetch<AuxPhonebook>("SELECT * FROM auxphonebook");
+            phonebook_practice_app.Utils.Print($"GetAllPhonebook => {query}");
+            IEnumerable<Phonebook> auxPhonebooks= mapper.Fetch<Phonebook>(query, args);
             return auxPhonebooks;
         }
 
-        public AuxPhonebook GetSingleAuxPhonebook(string auxPhonebookId)
+        public Phonebook GetSinglePhonebook(string auxPhonebookId)
         {
             throw new NotImplementedException();
         }
 
-        public bool CreateAuxPhonebook(AuxPhonebook auxPhonebook)
+        public bool CreatePhonebook(Phonebook auxPhonebook)
         {
+            phonebook_practice_app.Utils.Print($"CreatePhonebook => {auxPhonebook.ToString()}");
             mapper.Insert(auxPhonebook);
             return true;
         }
 
-        public bool UpdateAuxPhonebook(AuxPhonebook auxPhonebook)
+        public bool UpdatePhonebook(Phonebook auxPhonebook)
         {
-            mapper.Update<AuxPhonebook>("SET number=?, name = ? WHERE id = ?", auxPhonebook.Number, auxPhonebook.Name, auxPhonebook.Id);
+            phonebook_practice_app.Utils.Print($"UpdatePhonebook => {auxPhonebook.ToString()}");
+            mapper.Update<Phonebook>("SET number=?, name = ? WHERE id = ?", auxPhonebook.Number, auxPhonebook.Name, auxPhonebook.Id);
             return true;
         }
 
 
-        public bool DeleteAuxPhonebook(string auxPhonebookId)
+        public bool DeletePhonebook(string auxPhonebookId)
         {
-            mapper.Delete<AuxPhonebook>("WHERE id = ?", auxPhonebookId);
+            phonebook_practice_app.Utils.Print($"DeletePhonebook => {auxPhonebookId.ToString()}");
+            mapper.Delete<Phonebook>("WHERE id = ?", auxPhonebookId);
             //mapper.Delete(auxPhonebookId);
             return true;
         }
 
-        public long CheckAuxPhonebookCount(string auxPhonebookId)
+        public long CheckPhonebookCount(string auxPhonebookId)
         {
             throw new NotImplementedException();
         }
@@ -113,13 +124,14 @@ namespace phonebook_app_read.Persistence
 
         public bool CreatePhonebookReadName(PhonebookReadName phonebookReadName)
         {
+            phonebook_practice_app.Utils.Print($"CreatePhonebookReadName => {phonebookReadName.ToString()}");
             mapper.Insert(phonebookReadName);
             return true;
         }
 
         public bool DeletePhonebookReadName(PhonebookReadName phonebookReadName)
         {
-            phonebook_practice_app.Utils.Print($"DELETING {phonebookReadName.ToString()}");
+            phonebook_practice_app.Utils.Print($"DeletePhonebookReadName => {phonebookReadName.ToString()}");
             mapper.Delete<PhonebookReadName>("WHERE name = ? and number = ?", phonebookReadName.Name, phonebookReadName.Number);
             //mapper.Delete(auxPhonebookId);
             return true;

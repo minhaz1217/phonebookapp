@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
+using System.Runtime.CompilerServices;
 using System.Threading;
 using System.Threading.Tasks;
 using Confluent.Kafka;
@@ -22,36 +23,35 @@ namespace phonebook_app_read
     {
         static void BackgroundTask()
         {
-            IMessangerWrapper messangerWrapper = new KafkaWrapper("localhost: 9092");
-            IConsumer<Ignore, string> consumer = messangerWrapper.Consume("readTable1", new List<string>(){ "test2", "test3" });
-            var cancellationToken = new CancellationToken();
-            while (true)
-            {
-                var consumeResult = consumer.Consume(cancellationToken);
-                Utils.Print($"{consumeResult.Message.Value}  {consumeResult.Message} {consumeResult.Message.Key}");
-                if (consumeResult.Message.Value == "c")
-                {
-                    consumer.Close();
-                    break;
-                }
-            }
-            try
-            {
-                consumer.Close();
-            }catch(Exception ex)
-            {
+            //IMessangerWrapper messangerWrapper = new KafkaWrapper("localhost: 9092");
+            //IConsumer<Ignore, string> consumer = messangerWrapper.Consume("readTable1", new List<string>(){ "test2", "test3" });
+            //var cancellationToken = new CancellationToken();
+            //while (true)
+            //{
+            //    var consumeResult = consumer.Consume(cancellationToken);
+            //    Utils.Print($"{consumeResult.Message.Value}  {consumeResult.Message} {consumeResult.Message.Key}");
+            //    if (consumeResult.Message.Value == "c")
+            //    {
+            //        consumer.Close();
+            //        break;
+            //    }
+            //}
+            //try
+            //{
+            //    consumer.Close();
+            //}catch(Exception ex)
+            //{
 
-            }
-            Thread th = Thread.CurrentThread;
+            //}
+            //Thread th = Thread.CurrentThread;
 
-            th.Name = "MainThread";
+            //th.Name = "MainThread";
 
-            Utils.Print("This is {0}", th.Name);
+            //Utils.Print("This is {0}", th.Name);
 
         }
         public static void Main(string[] args)
         {
-            Thread StaticCaller = new Thread(new ThreadStart(Program.BackgroundTask));
 
             var config = new ConfigurationBuilder()
                             .SetBasePath(Directory.GetCurrentDirectory())
@@ -59,7 +59,7 @@ namespace phonebook_app_read
                             .AddCommandLine(args)
                             .Build();
             
-            Utils.Print($"{config.ToString()} {config.GetValue<string>("AllowedHosts")}");
+            //Utils.Print($"{config.ToString()} {config.GetValue<string>("AllowedHosts")}");
 
             IDBRepository db = CassandraDBRepository.Instance(config.GetValue<string>("CASSANDRA_SERVER_NAME"), config.GetValue<string>("CASSANDRA_KEYSPACE_NAME"));
             if (!db.TableExists("phonebookreadname"))
@@ -68,11 +68,28 @@ namespace phonebook_app_read
                 Utils.Print("phonebookreadname created");
             }
 
-            if (!db.TableExists("auxphonebook"))
+            if (!db.TableExists("phonebook"))
             {
-                db.CreateTable("CREATE TABLE auxphonebook(id text,name text,number text,PRIMARY KEY(id)); ");
-                Utils.Print("auxphonebook created");
+                db.CreateTable("CREATE TABLE phonebook(id text,name text,number text, PRIMARY KEY(id)); ");
+                Utils.Print("phonebook created");
             }
+
+            Thread StaticCaller = new Thread(new ThreadStart((new PhonebookConsumerService()).RegisterMethods));
+            StaticCaller.Start();
+            //IEnumerable<Phonebook> phonebooks = db.GetAllPhonebook("select * from phonebook where id=?", "78f73bdc-845c-46c7-9950-d83c75e8c805");
+            //foreach(Phonebook pb in phonebooks)
+            //{
+            //    Utils.Print(pb.ToString());
+            //}
+            //Utils.Print(phonebooks[0].ToString());
+            //Utils.Print(phonebooks.First().ToString());
+            //Utils.Print("PB ENDED");
+
+
+
+
+
+
 
             //AuxPhonebook aPhonebook = new AuxPhonebook("1111111111", "sfdgsdfg", "0123456");
 
@@ -109,7 +126,6 @@ namespace phonebook_app_read
 
 
             // Start the thread.
-            StaticCaller.Start();
 
 
             //Console.ReadKey();
