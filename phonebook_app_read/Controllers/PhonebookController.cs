@@ -1,11 +1,14 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Text;
+using System.Text.Json;
 using System.Threading.Tasks;
 using Autofac;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Configuration;
 using phonebook_app_read.Persistence;
+using phonebook_app_read.Persistence.mapper;
 using phonebook_app_read.Persistence.model;
 using phonebook_app_read.Service;
 
@@ -26,17 +29,46 @@ namespace phonebook_app_read.Controllers
         }
         // GET: api/<Phonebook>
         [HttpGet]
-        public IEnumerable<string> Get()
+        public ActionResult<string> Get()
         {
 
             IPhonebookReadService phonebookReadService = this.container.Resolve<IPhonebookReadService>();
-            IEnumerable<PhonebookReadName> phonebookReadNames = phonebookReadService.GetAll();
-            List<string> output = new List<string>();
-            foreach(PhonebookReadName pb in phonebookReadNames)
+            IEnumerable<PhonebookReadName> phonebookReadNames = new List<PhonebookReadName>();
+            StringBuilder sb = new StringBuilder();
+            if (!String.IsNullOrEmpty(HttpContext.Request.Query["name"]))
             {
-                output.Add(pb.ToString());
+                string value = HttpContext.Request.Query["name"];
+                phonebook_practice_app.Helper.Print($"Searching : {value}");
+                var phonebooks = this.container.Resolve<IPhonebookElasticSearch>().GetAll(ConfigReader.GetValue<string>("ElasticPhonebookIndex"), "name", value);
+                foreach(Phonebook pb in phonebooks)
+                {
+                    sb.Append( JsonSerializer.Serialize<PhonebookReadName>(PhonebookMapper.PhonebookToPhonebookReadName(pb)) );
+                    //phonebookReadNames.Append( PhonebookMapper.PhonebookToPhonebookReadName(pb) );
+                }
             }
-            return output;
+            else if (!String.IsNullOrEmpty(HttpContext.Request.Query["number"]))
+            {
+                string value = HttpContext.Request.Query["number"];
+                phonebook_practice_app.Helper.Print($"Searching : {value}");
+                var phonebooks = this.container.Resolve<IPhonebookElasticSearch>().GetAll(ConfigReader.GetValue<string>("ElasticPhonebookIndex"), "number", value);
+                foreach (Phonebook pb in phonebooks)
+                {
+                    sb.Append(JsonSerializer.Serialize<PhonebookReadName>(PhonebookMapper.PhonebookToPhonebookReadName(pb)));
+                    //phonebookReadNames.Append(PhonebookMapper.PhonebookToPhonebookReadName(pb));
+                }
+            }
+            else
+            {
+
+                phonebookReadNames = phonebookReadService.GetAll();
+                List<string> output = new List<string>();
+                foreach (PhonebookReadName pb in phonebookReadNames)
+                {
+                    sb.Append(JsonSerializer.Serialize<PhonebookReadName>(pb));
+                    //output.Add( JsonSerializer.Serialize<ListPhonebookReadName>>(phonebookReadNames) );
+                }
+            }
+            return Ok(sb.ToString());
         }
 
         // GET api/<Phonebook>/5
@@ -45,29 +77,6 @@ namespace phonebook_app_read.Controllers
         {
             return "value";
         }
-        [HttpGet("search/{searchTerm}/{searchValue}")]
-        public string Get(string searchTerm, string searchValue)
-        {
-            System.Text.StringBuilder output = new System.Text.StringBuilder();
-            if(searchTerm.ToLower() == "name")
-            {
-                var phonebooks = PhonebookElasticSearch.Instance().GetAll(ConfigReader.GetValue<string>("ElasticPhonebookIndex"), "name", searchValue);
-                foreach(Phonebook pb in phonebooks)
-                {
-                    output.Append(pb.ToString());
-                }
-            }
-            else if(searchTerm.ToLower() == "number")
-            {
-                var phonebooks = PhonebookElasticSearch.Instance().GetAll(ConfigReader.GetValue<string>("ElasticPhonebookIndex"), "number", searchValue);
-                foreach (Phonebook pb in phonebooks)
-                {
-                    output.Append(pb.ToString());
-                }
-            }
-            return output.ToString();
-        }
-
         // POST api/<Phonebook>
         [HttpPost]
         public void Post([FromBody] string value)
