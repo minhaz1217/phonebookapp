@@ -29,12 +29,12 @@ namespace phonebook_app_read.Controllers
         }
         // GET: api/<Phonebook>
         [HttpGet]
-        public ActionResult<string> Get()
+        public ActionResult Get()
         {
 
             IPhonebookReadService phonebookReadService = this.container.Resolve<IPhonebookReadService>();
             IEnumerable<PhonebookReadName> phonebookReadNames = new List<PhonebookReadName>();
-            StringBuilder sb = new StringBuilder();
+            List<PhonebookReadName> output = new List<PhonebookReadName>();
             if (!String.IsNullOrEmpty(HttpContext.Request.Query["name"]))
             {
                 string value = HttpContext.Request.Query["name"];
@@ -42,8 +42,8 @@ namespace phonebook_app_read.Controllers
                 var phonebooks = this.container.Resolve<IPhonebookElasticSearch>().GetAll(ConfigReader.GetValue<string>("ElasticPhonebookIndex"), "name", value);
                 foreach(Phonebook pb in phonebooks)
                 {
-                    sb.Append( JsonSerializer.Serialize<PhonebookReadName>(PhonebookMapper.PhonebookToPhonebookReadName(pb)) );
-                    //phonebookReadNames.Append( PhonebookMapper.PhonebookToPhonebookReadName(pb) );
+                    phonebookReadNames.Append(PhonebookMapper.PhonebookToPhonebookReadName(pb));
+                    output.Add(PhonebookMapper.PhonebookToPhonebookReadName(pb));
                 }
             }
             else if (!String.IsNullOrEmpty(HttpContext.Request.Query["number"]))
@@ -53,22 +53,20 @@ namespace phonebook_app_read.Controllers
                 var phonebooks = this.container.Resolve<IPhonebookElasticSearch>().GetAll(ConfigReader.GetValue<string>("ElasticPhonebookIndex"), "number", value);
                 foreach (Phonebook pb in phonebooks)
                 {
-                    sb.Append(JsonSerializer.Serialize<PhonebookReadName>(PhonebookMapper.PhonebookToPhonebookReadName(pb)));
-                    //phonebookReadNames.Append(PhonebookMapper.PhonebookToPhonebookReadName(pb));
+                    phonebookReadNames.Append(PhonebookMapper.PhonebookToPhonebookReadName(pb));
+                    output.Add(PhonebookMapper.PhonebookToPhonebookReadName(pb));
                 }
             }
             else
             {
-
                 phonebookReadNames = phonebookReadService.GetAll();
-                List<string> output = new List<string>();
                 foreach (PhonebookReadName pb in phonebookReadNames)
                 {
-                    sb.Append(JsonSerializer.Serialize<PhonebookReadName>(pb));
-                    //output.Add( JsonSerializer.Serialize<ListPhonebookReadName>>(phonebookReadNames) );
+                    output.Add(pb);
                 }
             }
-            return Ok(sb.ToString());
+            //phonebook_practice_app.Helper.Print($"Total : {output.Count.ToString()}");
+            return Ok(output);
         }
 
         // GET api/<Phonebook>/5
