@@ -5,7 +5,10 @@ using System.Linq;
 using System.Runtime.CompilerServices;
 using System.Threading;
 using System.Threading.Tasks;
+using Autofac.Extensions.DependencyInjection;
+using Bogus;
 using Confluent.Kafka;
+using Elasticsearch.Net;
 using KafkaConnection.kafkawrapper;
 using KafkaConnection.Messangerwrapper;
 using Microsoft.AspNetCore.Hosting;
@@ -14,6 +17,7 @@ using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
 using phonebook_app_read.Persistence;
 using phonebook_app_read.Persistence.model;
+using phonebook_app_read.Service;
 using phonebook_practice_app;
 using phonebook_practice_app.Persistence.wrapper;
 
@@ -23,6 +27,11 @@ namespace phonebook_app_read
     {
         static void BackgroundTask()
         {
+            //var node = new Uri("http://mynode.example.com:8082/apiKey");
+            //var config = new ConnectionConfiguration(node);
+            //var client = new ElasticClient(config);
+
+            // TODO: uncomment these to get the Kafka consumer running
             //IMessangerWrapper messangerWrapper = new KafkaWrapper("localhost: 9092");
             //IConsumer<Ignore, string> consumer = messangerWrapper.Consume("readTable1", new List<string>(){ "test2", "test3" });
             //var cancellationToken = new CancellationToken();
@@ -61,21 +70,60 @@ namespace phonebook_app_read
             
             //Utils.Print($"{config.ToString()} {config.GetValue<string>("AllowedHosts")}");
 
+            // TODO: move the tables creation to a seperate class
             IDBRepository db = CassandraDBRepository.Instance(config.GetValue<string>("CASSANDRA_SERVER_NAME"), config.GetValue<string>("CASSANDRA_KEYSPACE_NAME"));
             if (!db.TableExists("phonebookreadname"))
             {
                 db.CreateTable("CREATE TABLE phonebookreadname(name text,number text,PRIMARY KEY(name, number));");
-                Utils.Print("phonebookreadname created");
+                Helper.Print("phonebookreadname created");
             }
 
             if (!db.TableExists("phonebook"))
             {
                 db.CreateTable("CREATE TABLE phonebook(id text,name text,number text, PRIMARY KEY(id)); ");
-                Utils.Print("phonebook created");
+                Helper.Print("phonebook created");
             }
 
             Thread StaticCaller = new Thread(new ThreadStart((new PhonebookConsumerService()).RegisterMethods));
             StaticCaller.Start();
+
+            PhonebookElasticSearch es = PhonebookElasticSearch.Instance();
+
+            string indexName = "phonebooktest2";
+            Phonebook pbMinhaz = new Phonebook((Guid.NewGuid()).ToString(), "Minhazul", "000000000");
+
+            //Faker f = new Faker("en");
+            //for (int i = 0; i < 5; i++) 
+            //{
+
+            //    Phonebook val1 = new Phonebook((Guid.NewGuid()).ToString(), f.Name.FirstName(), f.Phone.PhoneNumber());
+            //    //val1 = new PhonebookReadName("minhaz", "123");
+            //    Helper.Print($"{val1.Name} {val1.Number}");
+            //    es.Insert(indexName, val1);
+            //}
+            string id = "1001";
+            pbMinhaz.Id = id;
+            Helper.Print($"Created: {es.Insert(indexName, pbMinhaz)}");
+            pbMinhaz.Name = "Minhaz";
+            Helper.Print($"Updated: {es.Update(indexName, pbMinhaz)}");
+            //Helper.Print($"Delete: {es.Delete(indexName, pbMinhaz)}");
+
+
+            //string name = val1.Name;
+            //var resp = es.Search(indexName, name);
+            ////Helper.Print(resp.Documents.ToString());
+            //Helper.Print("Searching");
+            //foreach (var x in resp)
+            //{
+            //    Helper.Print(x.ToString());
+            //}
+
+
+
+
+
+
+
             //IEnumerable<Phonebook> phonebooks = db.GetAllPhonebook("select * from phonebook where id=?", "78f73bdc-845c-46c7-9950-d83c75e8c805");
             //foreach(Phonebook pb in phonebooks)
             //{
@@ -125,7 +173,6 @@ namespace phonebook_app_read
             //});
 
 
-            // Start the thread.
 
 
             //Console.ReadKey();
@@ -136,6 +183,7 @@ namespace phonebook_app_read
 
         public static IHostBuilder CreateHostBuilder(string[] args) =>
             Host.CreateDefaultBuilder(args)
+                .UseServiceProviderFactory(new AutofacServiceProviderFactory())
                 .ConfigureWebHostDefaults(webBuilder =>
                 {
                     webBuilder.UseStartup<Startup>();

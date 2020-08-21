@@ -10,7 +10,7 @@ namespace phonebook_app_read.Persistence.mapper
     {
         public static PhonebookReadName PhonebookToPhonebookReadName(Phonebook phonebook)
         {
-            return new PhonebookReadName( phonebook.Name, phonebook.Id );
+            return new PhonebookReadName( phonebook.Name, phonebook.Number );
         }
     }
 }

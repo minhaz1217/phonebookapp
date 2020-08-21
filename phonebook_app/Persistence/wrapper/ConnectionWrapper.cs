@@ -69,18 +69,18 @@ namespace phonebook_practice_app.Persistence.wrapper
             if(connection != null)
             {
                 var insertQuery = GenerateInsertQuery<T>(item);
-                Utils.Print(insertQuery);
+                Helper.Print(insertQuery);
                 try
                 {
                     var x = connection.Execute(insertQuery);
-                    Utils.Print($"INSERTED {x.ToString()}");
+                    Helper.Print($"INSERTED {x.ToString()}");
                     if (x > 0)
                     {
                         return true;
                     }
                 }catch(Exception e)
                 {
-                    Utils.Print(e.Message);
+                    Helper.Print(e.Message);
                 }
             }
             return false;
@@ -140,7 +140,7 @@ namespace phonebook_practice_app.Persistence.wrapper
                 var attributes = prop.GetCustomAttributes(typeof(DescriptionAttribute), false);
                 if (attributes.Length <= 0 || ((attributes[0] as DescriptionAttribute)?.Description != "ignore"))
                 {
-                    Utils.Print(attributes.Length.ToString());
+                    Helper.Print(attributes.Length.ToString());
                     if( attributes.Length > 0 && (attributes[0] as DescriptionAttribute)?.Description == "primary")
                     {
                         wherePart.Append($"");
@@ -169,7 +169,7 @@ namespace phonebook_practice_app.Persistence.wrapper
             if(this.connection != null)
             {
                 var x = this.connection.Execute(GenerateUpdateQuery<T>(item));
-                Utils.Print($"UPDATED {x}");
+                Helper.Print($"UPDATED {x}");
                 return true;
             }
             //Utils.Print(GenerateUpdateQuery<T>(item));

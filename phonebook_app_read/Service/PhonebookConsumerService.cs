@@ -5,6 +5,7 @@ using Microsoft.Extensions.Configuration;
 using phonebook_app_read.Persistence;
 using phonebook_app_read.Persistence.mapper;
 using phonebook_app_read.Persistence.model;
+using phonebook_app_read.Service;
 using phonebook_practice_app;
 using System;
 using System.Collections.Generic;
@@ -20,6 +21,15 @@ namespace phonebook_app_read
     {
         CancellationToken cancellationToken;
         IDBRepository db = null;
+        string kafkaHost = "";
+        string kafkaGroup = "group100";
+        string phonebookTopic=  "phonebook" ;
+
+        string elasticPhonebookIndex = "";
+        PhonebookElasticSearch elastic = null;
+
+
+
         public PhonebookConsumerService() 
         {
             this.cancellationToken = new CancellationToken();
@@ -28,9 +38,13 @@ namespace phonebook_app_read
                             .AddJsonFile("appsettings.json", optional: true)
                             .Build();
 
-            Utils.Print($"{config.ToString()} {config.GetValue<string>("AllowedHosts")}");
-            this.db = CassandraDBRepository.Instance(config.GetValue<string>("CASSANDRA_SERVER_NAME"), config.GetValue<string>("CASSANDRA_KEYSPACE_NAME"));
+            Helper.Print($"{config.ToString()} {config.GetValue<string>("AllowedHosts")}");
 
+            this.kafkaHost = ConfigReader.GetValue<string>("KafkaHost");
+            
+            this.elasticPhonebookIndex = ConfigReader.GetValue<string>("ElasticPhonebookIndex");
+            this.db = CassandraDBRepository.Instance(ConfigReader.GetValue<string>("CASSANDRA_SERVER_NAME"), ConfigReader.GetValue<string>("CASSANDRA_KEYSPACE_NAME"));
+            this.elastic = PhonebookElasticSearch.Instance();
         }
 
         public void TopicManager(string message)
@@ -39,26 +53,30 @@ namespace phonebook_app_read
             if(wrapperModel.Action == "post")
             {
                 this.PhonebookPOST(wrapperModel.Child);
+                this.elastic.Insert(this.elasticPhonebookIndex, wrapperModel.Child);
             }
             else if (wrapperModel.Action == "put")
             {
                 this.PhonebookPUT(wrapperModel.Child);
+                this.elastic.Update(this.elasticPhonebookIndex, wrapperModel.Child);
             }
             else if (wrapperModel.Action == "patch")
             {
                 this.PhonebookPATCH(wrapperModel.Child);
+                this.elastic.Update(this.elasticPhonebookIndex, wrapperModel.Child);
             }
             else if (wrapperModel.Action == "delete")
             {
                 this.PhonebookDELETE(wrapperModel.Child);
+                this.elastic.Delete(this.elasticPhonebookIndex, wrapperModel.Child);
             }
         }
         public void RegisterMethods()
         {
-            IMessangerWrapper messangerWrapper = new KafkaWrapper("localhost: 9092");
+            IMessangerWrapper messangerWrapper = new KafkaWrapper(this.kafkaHost);
             Dictionary<string, Action<string>> dict = new Dictionary<string, Action<string>>();
-            dict["phonebook"] = this.TopicManager;
-            messangerWrapper.Consume("phonebookGroup7", dict, this.cancellationToken);
+            dict[phonebookTopic] = this.TopicManager;
+            messangerWrapper.Consume(this.kafkaGroup, dict, this.cancellationToken);
         }
 
 
@@ -78,8 +96,8 @@ namespace phonebook_app_read
             }
             if(oldEntry != null)
             {
-                Utils.Print("Old => " + oldEntry.ToString());
-                Utils.Print("New => " + phonebook.ToString());
+                Helper.Print("Old => " + oldEntry.ToString());
+                Helper.Print("New => " + phonebook.ToString());
                 this.db.DeletePhonebookReadName(PersistenceMapper.PhonebookToPhonebookReadName(oldEntry));
                 this.db.UpdatePhonebook(phonebook);
                 this.db.CreatePhonebookReadName(PersistenceMapper.PhonebookToPhonebookReadName(phonebook));
@@ -96,8 +114,8 @@ namespace phonebook_app_read
             }
             if (oldEntry != null)
             {
-                Utils.Print("Old => " + oldEntry.ToString());
-                Utils.Print("New => " + phonebook.ToString());
+                Helper.Print("Old => " + oldEntry.ToString());
+                Helper.Print("New => " + phonebook.ToString());
                 this.db.DeletePhonebookReadName(PersistenceMapper.PhonebookToPhonebookReadName(oldEntry));
                 this.db.UpdatePhonebook(phonebook);
                 this.db.CreatePhonebookReadName(PersistenceMapper.PhonebookToPhonebookReadName(phonebook));
