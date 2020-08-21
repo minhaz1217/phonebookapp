@@ -33,9 +33,8 @@ namespace phonebook_app_read.Persistence
                 if (cluster == null)
                 {
                     cluster = (Cluster)Cluster.Builder().AddContactPoints(SERVER_NAME).Build();
-                    session = (Session)cluster.Connect(KEYSPACE_NAME);
                 }
-                else
+                if(session == null)
                 {
                     session = (Session)cluster.Connect(KEYSPACE_NAME);
                 }
@@ -155,6 +154,11 @@ namespace phonebook_app_read.Persistence
             mapper.Delete<PhonebookReadName>("WHERE name = ? and number = ?", phonebookReadName.Name, phonebookReadName.Number);
             //mapper.Delete(auxPhonebookId);
             return true;
+        }
+        ~CassandraDBRepository() 
+        {
+            session.Dispose();
+            cluster.Dispose();
         }
     }
 }

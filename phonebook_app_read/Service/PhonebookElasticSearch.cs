@@ -28,7 +28,6 @@ namespace phonebook_app_read.Service
                 var node = new Uri(ConfigReader.GetValue<string>("ElasticSearchHost"));
                 var settings = new ConnectionSettings(node);
                 client = new ElasticClient(settings);
-                
             }
 
             return instance;
@@ -62,19 +61,18 @@ namespace phonebook_app_read.Service
             ISearchResponse<Phonebook> searchResponse = null;
             if (type == "name")
             {
-
-            searchResponse = client.Search<Phonebook>(s => s
-            .Index(index)
-            .Query(q => q
-                 .Match(m => m
-                    .Field(f => f.Name)
-                    .Query(value)
-                 )
-            )
-            );
-            }else if(type == "number")
+                searchResponse = client.Search<Phonebook>(s => s
+                    .Index(index)
+                    .Query(q => q
+                         .Match(m => m
+                            .Field(f => f.Name)
+                            .Query(value)
+                         )
+                    )
+                );
+            }
+            else if(type == "number")
             {
-
                 searchResponse = client.Search<Phonebook>(s => s
                     .Index(index)
                     .Query(q => q
@@ -87,6 +85,9 @@ namespace phonebook_app_read.Service
             }
             return searchResponse.Documents;
         }
-
+        ~PhonebookElasticSearch()
+        {
+            
+        }
     }
 }
