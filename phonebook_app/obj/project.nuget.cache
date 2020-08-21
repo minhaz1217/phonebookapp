@@ -1,12 +1,15 @@
 {
   "version": 2,
-  "dgSpecHash": "GiK8fXC6P6i+kcKLiU0ETRa+lfhUadTWhte1I6ma0HuHHqc5igD7pdgimj/kMiveaDbS4MWSubBBTmDer+jVqw==",
+  "dgSpecHash": "Ibr2sXxDze3fhdhuhFLvW1YghXNAJG1bBWFenOB09yXTUdJvtVGvk/JGNxveTyEyTV2f8nOZfFi2QyzDkPshow==",
   "success": true,
   "projectFilePath": "C:\\Users\\User\\source\\repos\\phonebook_app\\phonebook_app\\phonebook_app.csproj",
   "expectedPackageFiles": [
+    "C:\\Users\\User\\.nuget\\packages\\autofac\\5.2.0\\autofac.5.2.0.nupkg.sha512",
+    "C:\\Users\\User\\.nuget\\packages\\autofac.extensions.dependencyinjection\\6.0.0\\autofac.extensions.dependencyinjection.6.0.0.nupkg.sha512",
     "C:\\Users\\User\\.nuget\\packages\\confluent.kafka\\1.5.0\\confluent.kafka.1.5.0.nupkg.sha512",
     "C:\\Users\\User\\.nuget\\packages\\dapper\\2.0.35\\dapper.2.0.35.nupkg.sha512",
     "C:\\Users\\User\\.nuget\\packages\\librdkafka.redist\\1.5.0\\librdkafka.redist.1.5.0.nupkg.sha512",
+    "C:\\Users\\User\\.nuget\\packages\\microsoft.extensions.dependencyinjection.abstractions\\2.1.0\\microsoft.extensions.dependencyinjection.abstractions.2.1.0.nupkg.sha512",
     "C:\\Users\\User\\.nuget\\packages\\npgsql\\4.1.4\\npgsql.4.1.4.nupkg.sha512",
     "C:\\Users\\User\\.nuget\\packages\\system.memory\\4.5.0\\system.memory.4.5.0.nupkg.sha512",
     "C:\\Users\\User\\.nuget\\packages\\system.reflection.emit.lightweight\\4.7.0\\system.reflection.emit.lightweight.4.7.0.nupkg.sha512",

@@ -60,37 +60,14 @@ namespace phonebook_app_read
 
         }
         public static void Main(string[] args)
-        {
-
-            var config = new ConfigurationBuilder()
-                            .SetBasePath(Directory.GetCurrentDirectory())
-                            .AddJsonFile("appsettings.json", optional: true)
-                            .AddCommandLine(args)
-                            .Build();
-            
+        {            
             //Utils.Print($"{config.ToString()} {config.GetValue<string>("AllowedHosts")}");
 
             // TODO: move the tables creation to a seperate class
-            IDBRepository db = CassandraDBRepository.Instance(config.GetValue<string>("CASSANDRA_SERVER_NAME"), config.GetValue<string>("CASSANDRA_KEYSPACE_NAME"));
-            if (!db.TableExists("phonebookreadname"))
-            {
-                db.CreateTable("CREATE TABLE phonebookreadname(name text,number text,PRIMARY KEY(name, number));");
-                Helper.Print("phonebookreadname created");
-            }
 
-            if (!db.TableExists("phonebook"))
-            {
-                db.CreateTable("CREATE TABLE phonebook(id text,name text,number text, PRIMARY KEY(id)); ");
-                Helper.Print("phonebook created");
-            }
-
-            Thread StaticCaller = new Thread(new ThreadStart((new PhonebookConsumerService()).RegisterMethods));
-            StaticCaller.Start();
-
-            PhonebookElasticSearch es = PhonebookElasticSearch.Instance();
-
-            string indexName = "phonebooktest2";
-            Phonebook pbMinhaz = new Phonebook((Guid.NewGuid()).ToString(), "Minhazul", "000000000");
+            //PhonebookElasticSearch es = PhonebookElasticSearch.Instance();
+            //string indexName = "phonebooktest2";
+            //Phonebook pbMinhaz = new Phonebook((Guid.NewGuid()).ToString(), "Minhazul", "000000000");
 
             //Faker f = new Faker("en");
             //for (int i = 0; i < 5; i++) 
@@ -101,12 +78,12 @@ namespace phonebook_app_read
             //    Helper.Print($"{val1.Name} {val1.Number}");
             //    es.Insert(indexName, val1);
             //}
-            string id = "1001";
-            pbMinhaz.Id = id;
-            Helper.Print($"Created: {es.Insert(indexName, pbMinhaz)}");
-            pbMinhaz.Name = "Minhaz";
-            Helper.Print($"Updated: {es.Update(indexName, pbMinhaz)}");
-            //Helper.Print($"Delete: {es.Delete(indexName, pbMinhaz)}");
+            //string id = "1001";
+            //pbMinhaz.Id = id;
+            //Helper.Print($"Created: {es.Insert(indexName, pbMinhaz)}");
+            //pbMinhaz.Name = "Minhaz";
+            //Helper.Print($"Updated: {es.Update(indexName, pbMinhaz)}");
+            ////Helper.Print($"Delete: {es.Delete(indexName, pbMinhaz)}");
 
 
             //string name = val1.Name;

@@ -56,7 +56,7 @@ namespace phonebook_app_read.Service
             return (response.Result == Result.Deleted);
         }
 
-
+        // TODO: use reflection over the type to dynamically get the field property
         public IReadOnlyCollection<Phonebook> GetAll(string index, string type, string value = "")
         {
             ISearchResponse<Phonebook> searchResponse = null;

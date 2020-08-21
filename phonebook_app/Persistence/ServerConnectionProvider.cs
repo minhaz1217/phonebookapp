@@ -21,7 +21,9 @@ namespace phonebook_practice_app.Persistence
             {
                 this.connection = new NpgsqlConnection(this._connectionString);
                 this.connection.Open();
+
             }
+
             return this.connection;
         }
         ~ServerConnectionProvider()

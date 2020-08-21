@@ -11,6 +11,8 @@ using phonebook_practice_app.Persistence.wrapper;
 using Phonebook_Practice_App.model;
 using KafkaConnection.Messangerwrapper;
 using KafkaConnection.kafkawrapper;
+using Autofac;
+using phonebook_app.Service;
 
 namespace Phonebook_Practice_App.Controllers
 {
@@ -18,24 +20,20 @@ namespace Phonebook_Practice_App.Controllers
     [ApiController]
     public class PhonebookController : ControllerBase
     {
-        private readonly IConfiguration _appConfig;
-        private string dapperConnectionString = "";
-        private string kafkaConnectionString = "";
-        private string kafkaTopic = "phonebook";
 
-        public PhonebookController(IConfiguration config)
+        private ILifetimeScope container = null;
+        private IPhonebookService phonebookService = null;
+        public PhonebookController(IConfiguration config, ILifetimeScope container)
         {
-            this._appConfig = config;
-            dapperConnectionString = _appConfig.GetValue<string>("DapperConnectionString");
-            kafkaConnectionString = _appConfig.GetValue<string>("KafkaConnectionString");
+            this.container = container;
+            phonebookService = this.container.Resolve<IPhonebookService>();
         }
         // GET api/phonebook
         [HttpGet]
         public ActionResult<IEnumerable<string>> Get()
         {
-            IServerConnectionProvider connectionProvider = new ServerConnectionProvider(this.dapperConnectionString);
             List<string> myList = new List<string>();
-            List<Phonebook> myBooks = (List<Phonebook>)(new ConnectionWrapper(_appConfig)).GetAll<Phonebook>("select * from phonebook;");
+            List<Phonebook> myBooks = (List<Phonebook>)phonebookService.GetAll("select * from phonebook;");
             foreach (Phonebook book in myBooks)
             {
                 myList.Add(book.ToString());
@@ -52,9 +50,8 @@ namespace Phonebook_Practice_App.Controllers
             // {
             //     return BadRequest();
             // }
-            IServerConnectionProvider connectionProvider = new ServerConnectionProvider(this.dapperConnectionString);
             List<string> myList = new List<string>();
-            List<Phonebook> myBooks = (List<Phonebook>)(new ConnectionWrapper(_appConfig)).GetAll<Phonebook>($"select * from phonebook where id='{id}';");
+            List<Phonebook> myBooks = (List<Phonebook>)phonebookService.GetAll($"select * from phonebook where id='{id}';");
             foreach (Phonebook book in myBooks)
             {
                 myList.Add(book.ToString());
@@ -80,15 +77,8 @@ namespace Phonebook_Practice_App.Controllers
                 Helper.Print($"POST3 {phonebook.Id} => {phonebook.Name} {phonebook.Number}");
                 return BadRequest();
             }
-            ConnectionWrapper wrapper = new ConnectionWrapper(this._appConfig);
-            phonebook.Id = Guid.NewGuid().ToString();
-            Helper.Print($"POST {phonebook.Id} => {phonebook.Name} {phonebook.Number}");
-            wrapper.Create<Phonebook>(phonebook);
-            // TODO: use dependency injection
-            IMessangerWrapper kafkaWrapper = new KafkaWrapper(this.kafkaConnectionString);
-            WrapperModel<Phonebook> wrapperModel = new WrapperModel<Phonebook>("post", "phonebook", phonebook);
-            string kfStr = kafkaWrapper.Produce(this.kafkaTopic, JsonSerializer.Serialize(wrapperModel));
-            Helper.Print(kfStr);
+            this.phonebookService.Create(phonebook);
+            this.phonebookService.PublishPost(phonebook);
             return Accepted("Saved successfully");
         }
 
@@ -115,15 +105,10 @@ namespace Phonebook_Practice_App.Controllers
             {
                 return BadRequest();
             }
-            ConnectionWrapper wrapper = new ConnectionWrapper(this._appConfig);
             phonebook.Id = id;
-            wrapper.Update<Phonebook>(phonebook);
+            this.phonebookService.Update(phonebook);
             Helper.Print($"END put {id} {phonebook.Id}");
-
-            IMessangerWrapper kafkaWrapper = new KafkaWrapper(this.kafkaConnectionString);
-            WrapperModel<Phonebook> wrapperModel = new WrapperModel<Phonebook>("put", "phonebook", phonebook);
-            string kfStr = kafkaWrapper.Produce(this.kafkaTopic, JsonSerializer.Serialize(wrapperModel));
-            Helper.Print(kfStr);
+            this.phonebookService.PublishPut(phonebook);
             return Accepted();
 
         }
@@ -143,10 +128,9 @@ namespace Phonebook_Practice_App.Controllers
                 return BadRequest();
             }
             phonebook.Id = id;
-            ConnectionWrapper wrapper = new ConnectionWrapper(this._appConfig);
             if(phonebook.Name == null || phonebook.Number == null)
             {
-                List<Phonebook> phonebooks = (List<Phonebook>)wrapper.GetAll<Phonebook>($"select * from phonebook where id='{phonebook.Id}'");
+                List<Phonebook> phonebooks = (List<Phonebook>)this.phonebookService.GetAll($"select * from phonebook where id='{phonebook.Id}'");
                 foreach (Phonebook pb in phonebooks)
                 {
                     if (pb.Id == phonebook.Id)
@@ -163,11 +147,8 @@ namespace Phonebook_Practice_App.Controllers
                     }
                 }
             }            
-            wrapper.Update<Phonebook>(phonebook);
-            IMessangerWrapper kafkaWrapper = new KafkaWrapper(this.kafkaConnectionString);
-            WrapperModel<Phonebook> wrapperModel = new WrapperModel<Phonebook>("patch", "phonebook", phonebook);
-            string kfStr = kafkaWrapper.Produce(this.kafkaTopic, JsonSerializer.Serialize(wrapperModel));
-            Helper.Print(kfStr);
+            this.phonebookService.Update(phonebook);
+            this.phonebookService.PublishPatch(phonebook);
             return Accepted();
         }
 
@@ -185,20 +166,15 @@ namespace Phonebook_Practice_App.Controllers
             {
                 return BadRequest();
             }
-            ConnectionWrapper wrapper = new ConnectionWrapper(this._appConfig);
-            List<Phonebook> phonebooks = (List<Phonebook>)wrapper.GetAll<Phonebook>($"select * from phonebook where id='{id}'");
+            List<Phonebook> phonebooks = (List<Phonebook>)this.phonebookService.GetAll($"select * from phonebook where id='{id}'");
             if(phonebooks.Count <= 0)
             {
                 return BadRequest();
             }
             phonebooks.ForEach(delegate (Phonebook phonebook)
             {
-                WrapperModel<Phonebook> wrapperModel = new WrapperModel<Phonebook>("delete", "phonebook", phonebook);
-                IMessangerWrapper kafkaWrapper = new KafkaWrapper(this.kafkaConnectionString);
-                string msg = kafkaWrapper.Produce(this.kafkaTopic, JsonSerializer.Serialize(wrapperModel));
-                Helper.Print($"DELETING {phonebook.ToString()}");
-                wrapper.Delete<Phonebook>(phonebook);
-                Helper.Print(msg);
+                this.phonebookService.Delete(phonebook);
+                this.phonebookService.PublishDelete(phonebook);
             });
             return Accepted();
         }

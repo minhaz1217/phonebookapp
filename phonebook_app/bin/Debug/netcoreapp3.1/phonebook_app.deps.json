@@ -24,6 +24,8 @@
     ".NETCoreApp,Version=v3.1": {
       "phonebook_app/1.0.0": {
         "dependencies": {
+          "Autofac": "5.2.0",
+          "Autofac.Extensions.DependencyInjection": "6.0.0",
           "Dapper": "2.0.35",
           "KafkaConnection": "1.0.0",
           "Npgsql": "4.1.4",
@@ -118,7 +120,7 @@
           "Microsoft.Extensions.Configuration.KeyPerFile": "3.1.0.0",
           "Microsoft.Extensions.Configuration.UserSecrets": "3.1.0.0",
           "Microsoft.Extensions.Configuration.Xml": "3.1.0.0",
-          "Microsoft.Extensions.DependencyInjection.Abstractions": "3.1.0.0",
+          "Microsoft.Extensions.DependencyInjection.Abstractions.Reference": "3.1.0.0",
           "Microsoft.Extensions.DependencyInjection": "3.1.0.0",
           "Microsoft.Extensions.Diagnostics.HealthChecks.Abstractions": "3.1.0.0",
           "Microsoft.Extensions.Diagnostics.HealthChecks": "3.1.0.0",
@@ -317,6 +319,32 @@
           "phonebook_app.dll": {}
         }
       },
+      "Autofac/5.2.0": {
+        "runtime": {
+          "lib/netstandard2.1/Autofac.dll": {
+            "assemblyVersion": "5.2.0.0",
+            "fileVersion": "5.2.0.0"
+          }
+        },
+        "compile": {
+          "lib/netstandard2.1/Autofac.dll": {}
+        }
+      },
+      "Autofac.Extensions.DependencyInjection/6.0.0": {
+        "dependencies": {
+          "Autofac": "5.2.0",
+          "Microsoft.Extensions.DependencyInjection.Abstractions": "2.1.0"
+        },
+        "runtime": {
+          "lib/netstandard2.1/Autofac.Extensions.DependencyInjection.dll": {
+            "assemblyVersion": "6.0.0.0",
+            "fileVersion": "6.0.0.0"
+          }
+        },
+        "compile": {
+          "lib/netstandard2.1/Autofac.Extensions.DependencyInjection.dll": {}
+        }
+      },
       "Confluent.Kafka/1.5.0": {
         "dependencies": {
           "System.Memory": "4.5.0",
@@ -435,6 +463,7 @@
           }
         }
       },
+      "Microsoft.Extensions.DependencyInjection.Abstractions/2.1.0": {},
       "Npgsql/4.1.4": {
         "dependencies": {
           "System.Runtime.CompilerServices.Unsafe": "4.6.0"
@@ -1009,7 +1038,7 @@
         },
         "compileOnly": true
       },
-      "Microsoft.Extensions.DependencyInjection.Abstractions/3.1.0.0": {
+      "Microsoft.Extensions.DependencyInjection.Abstractions.Reference/3.1.0.0": {
         "compile": {
           "Microsoft.Extensions.DependencyInjection.Abstractions.dll": {}
         },
@@ -2163,6 +2192,20 @@
       "serviceable": false,
       "sha512": ""
     },
+    "Autofac/5.2.0": {
+      "type": "package",
+      "serviceable": true,
+      "sha512": "sha512-V8dBH0dsv75uDzl7Sw+HkhKDPUw2eXnlMjcSVMH+tLo2s67MpTKGyDj1pDcpR+IF2u4YRs0s3/x7R88YJzIWvg==",
+      "path": "autofac/5.2.0",
+      "hashPath": "autofac.5.2.0.nupkg.sha512"
+    },
+    "Autofac.Extensions.DependencyInjection/6.0.0": {
+      "type": "package",
+      "serviceable": true,
+      "sha512": "sha512-+1WNYENm4s/bSBrmTy2sD0zs6MCiCAlUaEbHJ+y7fKpXKqnFl4oTkIkUoDKlp05dl1VoAASBUJocaKKJa1KPCw==",
+      "path": "autofac.extensions.dependencyinjection/6.0.0",
+      "hashPath": "autofac.extensions.dependencyinjection.6.0.0.nupkg.sha512"
+    },
     "Confluent.Kafka/1.5.0": {
       "type": "package",
       "serviceable": true,
@@ -2183,6 +2226,13 @@
       "sha512": "sha512-27vxPMQ8qnzadF+IoMIQ3LcMAh/JwtE3uNFFOZaW4RCD+JV6KETwWYROMCth1pResxcvVtSyU/GdHI+M9t3C5g==",
       "path": "librdkafka.redist/1.5.0",
       "hashPath": "librdkafka.redist.1.5.0.nupkg.sha512"
+    },
+    "Microsoft.Extensions.DependencyInjection.Abstractions/2.1.0": {
+      "type": "package",
+      "serviceable": true,
+      "sha512": "sha512-8/CtASu80UIoyG+r8FstrmZW5GLtXxzoYpjj3jV0FKZCL5CiFgSH3pAmqut/dC68mu7N1bU6v0UtKKL3gCUQGQ==",
+      "path": "microsoft.extensions.dependencyinjection.abstractions/2.1.0",
+      "hashPath": "microsoft.extensions.dependencyinjection.abstractions.2.1.0.nupkg.sha512"
     },
     "Npgsql/4.1.4": {
       "type": "package",
@@ -2672,7 +2722,7 @@
       "serviceable": false,
       "sha512": ""
     },
-    "Microsoft.Extensions.DependencyInjection.Abstractions/3.1.0.0": {
+    "Microsoft.Extensions.DependencyInjection.Abstractions.Reference/3.1.0.0": {
       "type": "referenceassembly",
       "serviceable": false,
       "sha512": ""

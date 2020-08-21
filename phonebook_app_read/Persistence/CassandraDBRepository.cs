@@ -7,6 +7,7 @@ using phonebook_practice_app;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Runtime.CompilerServices;
 using System.Threading.Tasks;
 namespace phonebook_app_read.Persistence
 {
@@ -23,8 +24,7 @@ namespace phonebook_app_read.Persistence
         public static CassandraDBRepository Instance(string serverName, string keySpaceName)
         {
 
-            // DBController.GetInstance();
-            // new DBController();
+
             if (instance == null)
             {
                 instance = new CassandraDBRepository();
@@ -42,6 +42,20 @@ namespace phonebook_app_read.Persistence
                 mapper = new Mapper(session);
 
             }
+            #if DEBUG
+                if (!instance.TableExists("phonebookreadname"))
+                {
+                    instance.CreateTable("CREATE TABLE phonebookreadname(name text,number text,PRIMARY KEY(name, number));");
+                    //Helper.Print("phonebookreadname created");
+                }
+
+                if (!instance.TableExists("phonebook"))
+                {
+                    instance.CreateTable("CREATE TABLE phonebook(id text,name text,number text, PRIMARY KEY(id)); ");
+                    //Helper.Print("phonebook created");
+                }
+            #endif
+
             return instance;
         }
         public bool TableExists(string tableName)

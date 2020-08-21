@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using Autofac;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Configuration;
 using phonebook_app_read.Persistence;
@@ -17,18 +18,19 @@ namespace phonebook_app_read.Controllers
     public class PhonebookController : ControllerBase
     {
         private readonly IConfiguration _appConfig;
-        public PhonebookController(IConfiguration config)
+        private readonly ILifetimeScope container;
+        public PhonebookController(IConfiguration config, ILifetimeScope container)
         {
             this._appConfig = config;
+            this.container = container;
         }
         // GET: api/<Phonebook>
         [HttpGet]
         public IEnumerable<string> Get()
         {
 
-            IDBRepository db = CassandraDBRepository.Instance(_appConfig.GetValue<string>("CASSANDRA_SERVER_NAME"), _appConfig.GetValue<string>("CASSANDRA_KEYSPACE_NAME"));
-
-            IEnumerable<PhonebookReadName> phonebookReadNames = db.GetAllPhonebookReadName();
+            IPhonebookReadService phonebookReadService = this.container.Resolve<IPhonebookReadService>();
+            IEnumerable<PhonebookReadName> phonebookReadNames = phonebookReadService.GetAll();
             List<string> output = new List<string>();
             foreach(PhonebookReadName pb in phonebookReadNames)
             {

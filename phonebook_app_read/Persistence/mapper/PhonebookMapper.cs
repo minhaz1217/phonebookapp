@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace phonebook_app_read.Persistence.mapper
 {
-    public class PersistenceMapper
+    public class PhonebookMapper
     {
         public static PhonebookReadName PhonebookToPhonebookReadName(Phonebook phonebook)
         {

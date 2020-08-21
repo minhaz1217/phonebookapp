@@ -1013,6 +1013,8 @@
         "type": "project",
         "framework": ".NETCoreApp,Version=v3.1",
         "dependencies": {
+          "Autofac": "5.2.0",
+          "Autofac.Extensions.DependencyInjection": "6.0.0",
           "Dapper": "2.0.35",
           "KafkaConnection": "1.0.0",
           "Npgsql": "4.1.4"

@@ -5,6 +5,8 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <PackageReference Include="Autofac" Version="5.2.0" />
+    <PackageReference Include="Autofac.Extensions.DependencyInjection" Version="6.0.0" />
     <PackageReference Include="Bogus" Version="30.0.4" />
     <PackageReference Include="CassandraCSharpDriver" Version="3.15.1" />
     <PackageReference Include="CqlPoco" Version="1.0.0" />

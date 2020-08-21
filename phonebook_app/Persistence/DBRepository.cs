@@ -1,5 +1,8 @@
-﻿using Dapper;
+﻿using Autofac;
+using Dapper;
 using Npgsql;
+using phonebook_practice_app;
+using phonebook_practice_app.Persistence;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -11,10 +14,22 @@ namespace phonebook_app.Persistence
     {
         NpgsqlConnection connection = null;
 
-        public DBRepository(string connectionString)
+        public DBRepository(ILifetimeScope container)
         {
-            this.connection = new NpgsqlConnection(connectionString);
-            connection.Open();
+            if(this.connection == null)
+            {
+
+            this.connection = container.Resolve<IServerConnectionProvider>().GetConnection();
+
+            #if DEBUG
+                            Helper.Print("CONNECTION STARTING");
+                            if (!this.TableExists("phonebook"))
+                            {
+                                Helper.Print("TABLE MADE");
+                                this.CreateTable("CREATE TABLE phonebook(id text,name text,number text, PRIMARY KEY(id)); ");
+                            }
+            #endif
+            }
         }
         public bool CreateTable(string query)
         {

@@ -1,4 +1,5 @@
-﻿using Dapper;
+﻿using Autofac;
+using Dapper;
 using Microsoft.Extensions.Configuration;
 using Npgsql;
 using System;
@@ -12,8 +13,6 @@ namespace phonebook_practice_app.Persistence.wrapper
 {
     public class ConnectionWrapper : IConnectionWrapper
     {
-        private readonly IConfiguration _config;
-        private string _connectionString = "";
         NpgsqlConnection connection = null;
 
         public static List<string> GenerateListOfProperties(IEnumerable<PropertyInfo> listOfProperties)
@@ -24,14 +23,11 @@ namespace phonebook_practice_app.Persistence.wrapper
                     select prop.Name).ToList();
         }
 
-        public ConnectionWrapper(IConfiguration config)
+        public ConnectionWrapper(ILifetimeScope container)
         {
-            this._config = config;
-            _connectionString = _config.GetValue<string>("DapperConnectionString");
             if(connection == null)
             {
-                this.connection = new NpgsqlConnection(this._connectionString);
-                this.connection.Open();
+                this.connection = container.Resolve<IServerConnectionProvider>().GetConnection();
             }
         }
 

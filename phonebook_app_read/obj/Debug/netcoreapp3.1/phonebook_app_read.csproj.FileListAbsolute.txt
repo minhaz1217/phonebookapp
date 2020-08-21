@@ -54,3 +54,7 @@ C:\Users\User\source\repos\phonebook_app\phonebook_app_read\obj\Debug\netcoreapp
 C:\Users\User\source\repos\phonebook_app\phonebook_app_read\obj\Debug\netcoreapp3.1\phonebook_app_read.pdb
 C:\Users\User\source\repos\phonebook_app\phonebook_app_read\obj\Debug\netcoreapp3.1\phonebook_app_read.genruntimeconfig.cache
 C:\Users\User\source\repos\phonebook_app\phonebook_app_read\bin\Debug\netcoreapp3.1\Autofac.dll
+C:\Users\User\source\repos\phonebook_app\phonebook_app_read\bin\Debug\netcoreapp3.1\Autofac.Extensions.DependencyInjection.dll
+C:\Users\User\source\repos\phonebook_app\phonebook_app_read\obj\Debug\netcoreapp3.1\phonebook_app_read.csproj.CoreCompileInputs.cache
+C:\Users\User\source\repos\phonebook_app\phonebook_app_read\obj\Debug\netcoreapp3.1\phonebook_app_read.MvcApplicationPartsAssemblyInfo.cs
+C:\Users\User\source\repos\phonebook_app\phonebook_app_read\obj\Debug\netcoreapp3.1\phonebook_app_read.MvcApplicationPartsAssemblyInfo.cache

@@ -33,8 +33,6 @@ C:\Users\User\source\repos\phonebook_app\phonebook_app\bin\Debug\netcoreapp3.1\K
 C:\Users\User\source\repos\phonebook_app\phonebook_app\obj\Debug\netcoreapp3.1\phonebook_app.csprojAssemblyReference.cache
 C:\Users\User\source\repos\phonebook_app\phonebook_app\obj\Debug\netcoreapp3.1\phonebook_app.AssemblyInfoInputs.cache
 C:\Users\User\source\repos\phonebook_app\phonebook_app\obj\Debug\netcoreapp3.1\phonebook_app.AssemblyInfo.cs
-C:\Users\User\source\repos\phonebook_app\phonebook_app\obj\Debug\netcoreapp3.1\phonebook_app.csproj.CoreCompileInputs.cache
-C:\Users\User\source\repos\phonebook_app\phonebook_app\obj\Debug\netcoreapp3.1\phonebook_app.MvcApplicationPartsAssemblyInfo.cache
 C:\Users\User\source\repos\phonebook_app\phonebook_app\obj\Debug\netcoreapp3.1\phonebook_app.RazorTargetAssemblyInfo.cache
 C:\Users\User\source\repos\phonebook_app\phonebook_app\obj\Debug\netcoreapp3.1\phonebook_app.csproj.CopyComplete
 C:\Users\User\source\repos\phonebook_app\phonebook_app\obj\Debug\netcoreapp3.1\staticwebassets\phonebook_app.StaticWebAssets.Manifest.cache
@@ -42,3 +40,7 @@ C:\Users\User\source\repos\phonebook_app\phonebook_app\obj\Debug\netcoreapp3.1\s
 C:\Users\User\source\repos\phonebook_app\phonebook_app\obj\Debug\netcoreapp3.1\phonebook_app.dll
 C:\Users\User\source\repos\phonebook_app\phonebook_app\obj\Debug\netcoreapp3.1\phonebook_app.pdb
 C:\Users\User\source\repos\phonebook_app\phonebook_app\obj\Debug\netcoreapp3.1\phonebook_app.genruntimeconfig.cache
+C:\Users\User\source\repos\phonebook_app\phonebook_app\bin\Debug\netcoreapp3.1\Autofac.dll
+C:\Users\User\source\repos\phonebook_app\phonebook_app\bin\Debug\netcoreapp3.1\Autofac.Extensions.DependencyInjection.dll
+C:\Users\User\source\repos\phonebook_app\phonebook_app\obj\Debug\netcoreapp3.1\phonebook_app.csproj.CoreCompileInputs.cache
+C:\Users\User\source\repos\phonebook_app\phonebook_app\obj\Debug\netcoreapp3.1\phonebook_app.MvcApplicationPartsAssemblyInfo.cache

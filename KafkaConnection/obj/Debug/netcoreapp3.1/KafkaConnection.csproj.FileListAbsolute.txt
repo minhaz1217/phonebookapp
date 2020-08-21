@@ -29,3 +29,4 @@ C:\Users\User\source\repos\phonebook_app\KafkaConnection\obj\Debug\netcoreapp3.1
 C:\Users\User\source\repos\phonebook_app\KafkaConnection\obj\Debug\netcoreapp3.1\KafkaConnection.dll
 C:\Users\User\source\repos\phonebook_app\KafkaConnection\obj\Debug\netcoreapp3.1\KafkaConnection.pdb
 C:\Users\User\source\repos\phonebook_app\KafkaConnection\obj\Debug\netcoreapp3.1\KafkaConnection.genruntimeconfig.cache
+C:\Users\User\source\repos\phonebook_app\KafkaConnection\obj\Debug\netcoreapp3.1\KafkaConnection.csprojAssemblyReference.cache

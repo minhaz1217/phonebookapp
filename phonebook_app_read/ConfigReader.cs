@@ -2,6 +2,7 @@
 using Microsoft.Extensions.Configuration;
 using System;
 using System.Collections.Generic;
+using System.Collections.Specialized;
 using System.IO;
 using System.Linq;
 using System.Runtime.CompilerServices;
@@ -33,7 +34,8 @@ namespace phonebook_app_read
         public static T GetValue<T>(string name)
         {
             Instance();
-            return config.GetValue<T>(name);
+            T val =  config.GetValue<T>(name);
+            return val;
         }
     }
 }
