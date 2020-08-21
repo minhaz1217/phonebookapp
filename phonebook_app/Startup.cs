@@ -64,7 +64,7 @@ namespace phonebook_app
             {
                 app.UseDeveloperExceptionPage();
             }
-            // the codes to create the tables are in the dbrepository, this is here only to create the tables.
+            // the codes to create the tables are in the dbrepository, this is here ONLY TO create the tables.
             IDBRepository db = this.AutofacContainer.Resolve<IDBRepository>();
             app.UseHttpsRedirection();
 

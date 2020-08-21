@@ -11,9 +11,8 @@ namespace KafkaConnection.Messangerwrapper
 {
     public class KafkaWrapper : IMessangerWrapper
     {
-        private ProducerConfig config = null;
         private string ConnectionString = "";
-        public KafkaWrapper(string connectionUrl = "localhost:9092")
+        public KafkaWrapper(string connectionUrl)
         {
             this.ConnectionString = connectionUrl;
         }
@@ -25,7 +24,7 @@ namespace KafkaConnection.Messangerwrapper
 
         public string Produce(string topic, string message)
         {
-            config = new ProducerConfig
+            var config = new ProducerConfig
             {
                 BootstrapServers = this.ConnectionString,
                 ClientId = Dns.GetHostName(),

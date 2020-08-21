@@ -76,7 +76,8 @@ namespace phonebook_app.Service
         {
             IMessangerWrapper kafkaWrapper = this.container.Resolve<IMessangerWrapper>();
             WrapperModel<Phonebook> wrapperModel = new WrapperModel<Phonebook>("delete", "phonebook", phonebook);
-            string msg = kafkaWrapper.Produce(this.kafkaTopic, JsonSerializer.Serialize(wrapperModel));
+            string kfStr = kafkaWrapper.Produce(this.kafkaTopic, JsonSerializer.Serialize(wrapperModel));
+            Helper.Print(kfStr);
             return true;
         }
     }
