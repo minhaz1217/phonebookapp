@@ -30,34 +30,22 @@ namespace Phonebook_Practice_App.Controllers
         }
         // GET api/phonebook
         [HttpGet]
-        public ActionResult<IEnumerable<string>> Get()
+        public ActionResult Get()
         {
-            List<string> myList = new List<string>();
             List<Phonebook> myBooks = (List<Phonebook>)phonebookService.GetAll("select * from phonebook;");
-            foreach (Phonebook book in myBooks)
-            {
-                myList.Add(book.ToString());
-            }
-
-            return myList;
+            return Ok(myBooks);
         }
 
         // GET api/phonebook/5
         [HttpGet("{id}")]
-        public ActionResult<IEnumerable<string>> Get(string id)
+        public ActionResult Get(string id)
         {
             // if (id != item.Id)
             // {
             //     return BadRequest();
             // }
-            List<string> myList = new List<string>();
             List<Phonebook> myBooks = (List<Phonebook>)phonebookService.GetAll($"select * from phonebook where id='{id}';");
-            foreach (Phonebook book in myBooks)
-            {
-                myList.Add(book.ToString());
-            }
-
-            return myList;
+            return Ok(myBooks);
         }
 
         // POST api/phonebook
@@ -79,7 +67,7 @@ namespace Phonebook_Practice_App.Controllers
             }
             this.phonebookService.Create(phonebook);
             this.phonebookService.PublishPost(phonebook);
-            return Accepted("Saved successfully");
+            return Ok("Saved successfully");
         }
 
         // PUT api/phonebook/5
@@ -109,7 +97,7 @@ namespace Phonebook_Practice_App.Controllers
             this.phonebookService.Update(phonebook);
             Helper.Print($"END put {id} {phonebook.Id}");
             this.phonebookService.PublishPut(phonebook);
-            return Accepted();
+            return Ok("Put successful");
 
         }
         // PATCH api/phonebook/5
@@ -149,7 +137,7 @@ namespace Phonebook_Practice_App.Controllers
             }            
             this.phonebookService.Update(phonebook);
             this.phonebookService.PublishPatch(phonebook);
-            return Accepted();
+            return Ok("Patch successful");
         }
 
         // DELETE api/phonebook/5
@@ -176,7 +164,7 @@ namespace Phonebook_Practice_App.Controllers
                 this.phonebookService.Delete(phonebook);
                 this.phonebookService.PublishDelete(phonebook);
             });
-            return Accepted();
+            return Ok("Delete successful");
         }
     }
 }

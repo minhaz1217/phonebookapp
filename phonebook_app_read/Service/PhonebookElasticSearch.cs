@@ -59,7 +59,7 @@ namespace phonebook_app_read.Service
         public IReadOnlyCollection<Phonebook> GetAll(string index, string type, string value = "")
         {
             ISearchResponse<Phonebook> searchResponse = null;
-            if (type == "name")
+            if (type.ToLower() == "name")
             {
                 searchResponse = client.Search<Phonebook>(s => s
                     .Index(index)
@@ -71,7 +71,7 @@ namespace phonebook_app_read.Service
                     )
                 );
             }
-            else if(type == "number")
+            else if(type.ToLower() == "number")
             {
                 searchResponse = client.Search<Phonebook>(s => s
                     .Index(index)
@@ -87,7 +87,7 @@ namespace phonebook_app_read.Service
         }
         ~PhonebookElasticSearch()
         {
-            
+            // close the elastic connection
         }
     }
 }
