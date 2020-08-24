@@ -1,6 +1,7 @@
 ﻿using Autofac;
 using KafkaConnection.kafkawrapper;
 using KafkaConnection.model;
+using phonebook_app.Persistence;
 using phonebook_app_read;
 using phonebook_practice_app;
 using phonebook_practice_app.Persistence.wrapper;
@@ -15,70 +16,67 @@ namespace phonebook_app.Service
 {
     public class PhonebookService : IPhonebookService
     {
-        private string kafkaTopic = "phonebooktest101";
-
+        private string kafkaTopic = "phonebook.incoming";
         private ILifetimeScope container = null;
+        private IMessagePublisher messagePublisher = null;
+        private IDBRepository dbRepository = null;
         public PhonebookService(ILifetimeScope container)
         {
             this.container = container;
+            this.messagePublisher = this.container.Resolve<IMessagePublisher>();
+            this.dbRepository = this.container.Resolve<IDBRepository>();
         }
         public bool Create(Phonebook phonebook)
         {
-            IConnectionWrapper wrapper = this.container.Resolve<IConnectionWrapper>();
             phonebook.Id = Guid.NewGuid().ToString();
-            return wrapper.Create<Phonebook>(phonebook);
+            this.messagePublisher.PublishPost(phonebook);
+            return this.dbRepository.Create(phonebook);
         }
 
         public bool Delete(Phonebook phonebook)
         {
-            IConnectionWrapper wrapper = this.container.Resolve<IConnectionWrapper>();
-            return wrapper.Delete<Phonebook>(phonebook);
+            this.messagePublisher.PublishDelete(phonebook);
+            return this.dbRepository.Delete(phonebook);
         }
 
         public IEnumerable<Phonebook> GetAll(string query)
         {
-            List<Phonebook> myBooks = (List<Phonebook>)(this.container.Resolve<IConnectionWrapper>()).GetAll<Phonebook>(query);
+            //List<Phonebook> myBooks = (List<Phonebook>)(this.container.Resolve<IConnectionWrapper>()).GetAll<Phonebook>(query);
+            List<Phonebook> myBooks = (List<Phonebook>) this.dbRepository.GetAllPhonebooks(query);
             return myBooks;
+        }
+        public IEnumerable<Phonebook> GetAllPhonebooks()
+        {
+            List<Phonebook> myBooks = (List<Phonebook>)this.dbRepository.GetAllPhonebooks("select * from phonebook;");
+            return myBooks;
+        }
+        public IEnumerable<Phonebook> GetPhonebooksById(string id)
+        {
+            Guid gId = new Guid();
+            Guid.TryParse(id, out gId);
+            if(gId== new Guid())
+            {
+                return new List<Phonebook>();
+            }
+            List<Phonebook> myBooks = (List<Phonebook>)this.dbRepository.GetAllPhonebooks($"select * from phonebook where id='{id}';");
+            return myBooks;
+        }
+        public bool Put(Phonebook phonebook)
+        {
+            this.messagePublisher.PublishPut(phonebook);
+            return this.dbRepository.Update(phonebook);
+        }
+
+        public bool Patch(Phonebook phonebook)
+        {
+            this.messagePublisher.PublishPatch(phonebook);
+            return this.dbRepository.Update(phonebook);
         }
 
         public bool Update(Phonebook phonebook)
         {
-            IConnectionWrapper wrapper = this.container.Resolve<IConnectionWrapper>();
-            return wrapper.Update<Phonebook>(phonebook);
+            return this.dbRepository.Update(phonebook);
         }
 
-
-        public bool PublishPost(Phonebook phonebook)
-        {
-            IMessangerWrapper kafkaWrapper = this.container.Resolve<IMessangerWrapper>();
-            WrapperModel<Phonebook> wrapperModel = new WrapperModel<Phonebook>("post", "phonebook", phonebook);
-            string kfStr = kafkaWrapper.Produce(this.kafkaTopic, JsonSerializer.Serialize(wrapperModel));
-            Helper.Print(kfStr);
-            return true;
-        }
-        public bool PublishPut(Phonebook phonebook)
-        {
-            IMessangerWrapper kafkaWrapper = this.container.Resolve<IMessangerWrapper>();
-            WrapperModel<Phonebook> wrapperModel = new WrapperModel<Phonebook>("put", "phonebook", phonebook);
-            string kfStr = kafkaWrapper.Produce(this.kafkaTopic, JsonSerializer.Serialize(wrapperModel));
-            Helper.Print(kfStr);
-            return true;
-        }
-        public bool PublishPatch(Phonebook phonebook)
-        {
-            IMessangerWrapper kafkaWrapper = this.container.Resolve<IMessangerWrapper>();
-            WrapperModel<Phonebook> wrapperModel = new WrapperModel<Phonebook>("patch", "phonebook", phonebook);
-            string kfStr = kafkaWrapper.Produce(this.kafkaTopic, JsonSerializer.Serialize(wrapperModel));
-            Helper.Print(kfStr);
-            return true;
-        }
-        public bool PublishDelete(Phonebook phonebook)
-        {
-            IMessangerWrapper kafkaWrapper = this.container.Resolve<IMessangerWrapper>();
-            WrapperModel<Phonebook> wrapperModel = new WrapperModel<Phonebook>("delete", "phonebook", phonebook);
-            string kfStr = kafkaWrapper.Produce(this.kafkaTopic, JsonSerializer.Serialize(wrapperModel));
-            Helper.Print(kfStr);
-            return true;
-        }
     }
 }

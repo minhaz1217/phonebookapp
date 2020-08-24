@@ -21,8 +21,8 @@ namespace phonebook_app_read
     public class PhonebookConsumerService : IPhonebookConsumerService
     {
         string kafkaHost = "";
-        string kafkaGroup = "group100";
-        string phonebookTopic= "phonebooktest101";
+        string kafkaGroup = "phonebookReader";
+        string phonebookTopic= "phonebook.incoming";
 
         string elasticPhonebookIndex = "";
 

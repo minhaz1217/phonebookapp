@@ -14,21 +14,27 @@ namespace phonebook_practice_app.Persistence.wrapper
     public class ConnectionWrapper : IConnectionWrapper
     {
         NpgsqlConnection connection = null;
+        private string _connectionString = "";
 
+
+        public ConnectionWrapper(ILifetimeScope container, string connectionString)
+        {
+            if (connection == null)
+            {
+                this._connectionString = connectionString;
+                if (this.connection == null)
+                {
+                    this.connection = new NpgsqlConnection(this._connectionString);
+                    this.connection.Open();
+                }
+            }
+        }
         public static List<string> GenerateListOfProperties(IEnumerable<PropertyInfo> listOfProperties)
         {
             return (from prop in listOfProperties
                     let attributes = prop.GetCustomAttributes(typeof(DescriptionAttribute), false)
                     where attributes.Length <= 0 || (attributes[0] as DescriptionAttribute)?.Description != "ignore"
                     select prop.Name).ToList();
-        }
-
-        public ConnectionWrapper(ILifetimeScope container)
-        {
-            if(connection == null)
-            {
-                this.connection = container.Resolve<IServerConnectionProvider>().GetConnection();
-            }
         }
 
 
@@ -169,6 +175,30 @@ namespace phonebook_practice_app.Persistence.wrapper
                 return true;
             }
             //Utils.Print(GenerateUpdateQuery<T>(item));
+            return false;
+        }
+
+
+        public bool CreateTable(string query)
+        {
+            try
+            {
+                this.connection.Execute(query);
+                return true;
+            }
+            catch (Exception ex)
+            {
+                return false;
+            }
+        }
+
+        public bool TableExists(string tableName)
+        {
+            var res = connection.Query<bool>($"select exists(SELECT * FROM information_schema.tables where table_name = '{tableName}'); ");
+            foreach (bool exists in res)
+            {
+                return exists;
+            }
             return false;
         }
         ~ConnectionWrapper()

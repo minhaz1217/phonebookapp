@@ -3,6 +3,8 @@ using Dapper;
 using Npgsql;
 using phonebook_practice_app;
 using phonebook_practice_app.Persistence;
+using phonebook_practice_app.Persistence.wrapper;
+using Phonebook_Practice_App.model;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -10,47 +12,50 @@ using System.Threading.Tasks;
 
 namespace phonebook_app.Persistence
 {
-    public class DBRepository : IDBRepository
+    public class DBRepository :IDBRepository
     {
         NpgsqlConnection connection = null;
+        string _connectionString = "";
+        IConnectionWrapper wrapper = null;
 
         public DBRepository(ILifetimeScope container)
         {
             if(this.connection == null)
             {
-
-            this.connection = container.Resolve<IServerConnectionProvider>().GetConnection();
-
-            #if DEBUG
-                            Helper.Print("CONNECTION STARTING");
-                            if (!this.TableExists("phonebook"))
-                            {
-                                Helper.Print("TABLE MADE");
-                                this.CreateTable("CREATE TABLE phonebook(id text,name text,number text, PRIMARY KEY(id)); ");
-                            }
-            #endif
+                //Console.WriteLine("HELLO WORLD "+this._connectionString);
+                if (this.connection == null)
+                {
+                    this.connection = new NpgsqlConnection(this._connectionString);
+                    this.connection.Open();
+                }
+                #if DEBUG
+                    if (!wrapper.TableExists("phonebook"))
+                    {
+                        wrapper.CreateTable("CREATE TABLE phonebook(id text,name text,number text, PRIMARY KEY(id)); ");
+                    }
+                #endif
             }
+            wrapper = container.Resolve<IConnectionWrapper>();
         }
-        public bool CreateTable(string query)
+        public IEnumerable<Phonebook> GetAllPhonebooks(string query)
         {
-            try
-            {
-                this.connection.Execute(query);
-                return true;
-            }catch(Exception ex)
-            {
-                return false;
-            }
+            return (List<Phonebook>)wrapper.GetAll<Phonebook>(query);
         }
 
-        public bool TableExists(string tableName)
+        public bool Create(Phonebook phonebook)
         {
-            var res = connection.Query<bool>($"select exists(SELECT * FROM information_schema.tables where table_name = '{tableName}'); ");
-            foreach(bool exists in res)
-            {
-                return exists;
-            }
-            return false;
+            return wrapper.Create<Phonebook>(phonebook);
+
+        }
+
+        public bool Update(Phonebook phonebook)
+        {
+            return wrapper.Update<Phonebook>(phonebook);
+        }
+
+        public bool Delete(Phonebook phonebook)
+        {
+            return wrapper.Delete<Phonebook>(phonebook);
         }
 
         ~DBRepository()

@@ -7,6 +7,7 @@ using System.Threading.Tasks;
 using Autofac;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Configuration;
+using Nest;
 using phonebook_app_read.Persistence;
 using phonebook_app_read.Persistence.mapper;
 using phonebook_app_read.Persistence.model;
@@ -22,10 +23,14 @@ namespace phonebook_app_read.Controllers
     {
         private readonly IConfiguration _appConfig;
         private readonly ILifetimeScope container;
+        private IPhonebookElasticSearch elasticsearch = null;
+        private string elasticSearchIndex = "";
         public PhonebookController(IConfiguration config, ILifetimeScope container)
         {
             this._appConfig = config;
             this.container = container;
+            this.elasticsearch = this.container.Resolve<IPhonebookElasticSearch>();
+            this.elasticSearchIndex = ConfigReader.GetValue<string>("ElasticPhonebookIndex");
         }
         // GET: api/<Phonebook>
         [HttpGet]
@@ -39,7 +44,7 @@ namespace phonebook_app_read.Controllers
             {
                 string value = HttpContext.Request.Query["name"];
                 phonebook_practice_app.Helper.Print($"Searching : {value}");
-                var phonebooks = this.container.Resolve<IPhonebookElasticSearch>().GetAll(ConfigReader.GetValue<string>("ElasticPhonebookIndex"), "name", value);
+                var phonebooks = this.elasticsearch.GetAll(this.elasticSearchIndex, "name", value);
                 foreach(Phonebook pb in phonebooks)
                 {
                     phonebookReadNames.Append(PhonebookMapper.PhonebookToPhonebookReadName(pb));
@@ -50,7 +55,7 @@ namespace phonebook_app_read.Controllers
             {
                 string value = HttpContext.Request.Query["number"];
                 phonebook_practice_app.Helper.Print($"Searching : {value}");
-                var phonebooks = this.container.Resolve<IPhonebookElasticSearch>().GetAll(ConfigReader.GetValue<string>("ElasticPhonebookIndex"), "number", value);
+                var phonebooks = this.elasticsearch.GetAll(this.elasticSearchIndex, "number", value);
                 foreach (Phonebook pb in phonebooks)
                 {
                     phonebookReadNames.Append(PhonebookMapper.PhonebookToPhonebookReadName(pb));
@@ -67,30 +72,6 @@ namespace phonebook_app_read.Controllers
             }
             //phonebook_practice_app.Helper.Print($"Total : {output.Count.ToString()}");
             return Ok(output);
-        }
-
-        // GET api/<Phonebook>/5
-        [HttpGet("{id}")]
-        public string Get(int id)
-        {
-            return "value";
-        }
-        // POST api/<Phonebook>
-        [HttpPost]
-        public void Post([FromBody] string value)
-        {
-        }
-
-        // PUT api/<Phonebook>/5
-        [HttpPut("{id}")]
-        public void Put(int id, [FromBody] string value)
-        {
-        }
-
-        // DELETE api/<Phonebook>/5
-        [HttpDelete("{id}")]
-        public void Delete(int id)
-        {
         }
     }
 }

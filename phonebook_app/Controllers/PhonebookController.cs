@@ -32,7 +32,7 @@ namespace Phonebook_Practice_App.Controllers
         [HttpGet]
         public ActionResult Get()
         {
-            List<Phonebook> myBooks = (List<Phonebook>)phonebookService.GetAll("select * from phonebook;");
+            List<Phonebook> myBooks = (List<Phonebook>)phonebookService.GetAllPhonebooks();
             return Ok(myBooks);
         }
 
@@ -44,7 +44,13 @@ namespace Phonebook_Practice_App.Controllers
             // {
             //     return BadRequest();
             // }
-            List<Phonebook> myBooks = (List<Phonebook>)phonebookService.GetAll($"select * from phonebook where id='{id}';");
+            Guid guid = new Guid();
+            Guid.TryParse(id, out guid);
+            if(guid == new Guid())
+            {
+                return BadRequest();
+            }
+            List<Phonebook> myBooks = (List<Phonebook>)phonebookService.GetPhonebooksById(id);
             return Ok(myBooks);
         }
 
@@ -65,8 +71,13 @@ namespace Phonebook_Practice_App.Controllers
                 Helper.Print($"POST3 {phonebook.Id} => {phonebook.Name} {phonebook.Number}");
                 return BadRequest();
             }
+            long number = 0;
+            long.TryParse(phonebook.Number, out number);
+            if (number <= 0)
+            {
+                return BadRequest();
+            }
             this.phonebookService.Create(phonebook);
-            this.phonebookService.PublishPost(phonebook);
             return Ok("Saved successfully");
         }
 
@@ -93,12 +104,16 @@ namespace Phonebook_Practice_App.Controllers
             {
                 return BadRequest();
             }
+            long number = 0;
+            long.TryParse(phonebook.Number, out number);
+            if (number <= 0)
+            {
+                return BadRequest();
+            }
             phonebook.Id = id;
-            this.phonebookService.Update(phonebook);
+            this.phonebookService.Put(phonebook);
             Helper.Print($"END put {id} {phonebook.Id}");
-            this.phonebookService.PublishPut(phonebook);
             return Ok("Put successful");
-
         }
         // PATCH api/phonebook/5
         [HttpPatch("{id}")]
@@ -134,9 +149,14 @@ namespace Phonebook_Practice_App.Controllers
                         break;
                     }
                 }
-            }            
-            this.phonebookService.Update(phonebook);
-            this.phonebookService.PublishPatch(phonebook);
+            }
+            long number = 0;
+            long.TryParse(phonebook.Number, out number);
+            if (number <= 0)
+            {
+                return BadRequest();
+            }
+            this.phonebookService.Patch(phonebook);
             return Ok("Patch successful");
         }
 
@@ -162,7 +182,6 @@ namespace Phonebook_Practice_App.Controllers
             phonebooks.ForEach(delegate (Phonebook phonebook)
             {
                 this.phonebookService.Delete(phonebook);
-                this.phonebookService.PublishDelete(phonebook);
             });
             return Ok("Delete successful");
         }

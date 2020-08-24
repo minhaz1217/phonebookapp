@@ -7,7 +7,5 @@ namespace phonebook_app_read.Persistence
 {
     interface IDBRepository : IPhonebookRepository, IPhonebookReadNameRepository
     {
-        bool TableExists(string tableName);
-        bool CreateTable(string query);
     }
 }

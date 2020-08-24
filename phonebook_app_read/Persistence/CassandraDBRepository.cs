@@ -1,8 +1,10 @@
-﻿using Cassandra;
+﻿using Autofac;
+using Cassandra;
 using Cassandra.Mapping;
 using CqlPoco;
 using Microsoft.VisualBasic.CompilerServices;
 using phonebook_app_read.Persistence.model;
+using phonebook_app_read.Persistence.wrapper;
 using phonebook_practice_app;
 using System;
 using System.Collections.Generic;
@@ -14,110 +16,53 @@ namespace phonebook_app_read.Persistence
     public class CassandraDBRepository : IDBRepository
     {
 
+        public ILifetimeScope container { get; private set; }
         private static CassandraDBRepository instance = null;
-        private static string SERVER_NAME;
-        private static string KEYSPACE_NAME;
-        private static Cluster cluster = null;
-        private static Session session = null;
-        private static IMapper mapper = null;
+        private static ICassandraWrapper wrapper = null;
         private CassandraDBRepository() { }
-        public static CassandraDBRepository Instance(string serverName, string keySpaceName)
+        public static CassandraDBRepository Instance(ILifetimeScope container)
         {
-
-
             if (instance == null)
             {
                 instance = new CassandraDBRepository();
-                SERVER_NAME = serverName;
-                KEYSPACE_NAME = keySpaceName;
-                if (cluster == null)
-                {
-                    cluster = (Cluster)Cluster.Builder().AddContactPoints(SERVER_NAME).Build();
-                }
-                if(session == null)
-                {
-                    session = (Session)cluster.Connect(KEYSPACE_NAME);
-                }
-                mapper = new Mapper(session);
-
+                wrapper = container.Resolve<ICassandraWrapper>();
             }
             #if DEBUG
-                if (!instance.TableExists("phonebookreadname"))
+                if (!wrapper.TableExists("phonebookreadname"))
                 {
-                    instance.CreateTable("CREATE TABLE phonebookreadname(name text,number text,PRIMARY KEY(name, number));");
+                wrapper.CreateTable("CREATE TABLE phonebookreadname(name text,number text, PRIMARY KEY(name, number));");
                     //Helper.Print("phonebookreadname created");
                 }
 
-                if (!instance.TableExists("phonebook"))
+                if (!wrapper.TableExists("phonebook"))
                 {
-                    instance.CreateTable("CREATE TABLE phonebook(id text,name text,number text, PRIMARY KEY(id)); ");
+                wrapper.CreateTable("CREATE TABLE phonebook(id text,name text,number text, PRIMARY KEY(id)); ");
                     //Helper.Print("phonebook created");
                 }
             #endif
 
             return instance;
         }
-        public bool TableExists(string tableName)
-        {
-
-            //phonebook_practice_app.Utils.Print("REACHED " + tableName);
-            PreparedStatement ps = session.Prepare($"SELECT count(table_name) as count FROM system_schema.tables WHERE keyspace_name=? and table_name = ?;");
-            BoundStatement statement = ps.Bind(KEYSPACE_NAME, tableName);
-            RowSet rowSet = session.Execute(statement);
-            foreach (Row row in rowSet)
-            {
-                return row.GetValue<long>("count")>0?true:false;
-            }
-            //session.Execute($"SELECT count(table_name) as count FROM system_schema.tables WHERE keyspace_name='{KEYSPACE_NAME}' and table_name = '{tableName}';");
-            return false;
-        }
-        public bool CreateTable(string query)
-        {
-            try
-            {
-                RowSet rowSet = session.Execute(query);
-                return true;
-            }catch(Exception ex)
-            {
-                return false;
-            }
-        }
-
-        public Phonebook GetById(string id)
-        {
-            //PreparedStatement ps = session.Prepare($"SELECT * FROM {Product.TABLE_NAME} where {Product.COL_ID}=?;");
-            //BoundStatement statement = ps.Bind(productId.ToString());
-            //RowSet rowSet = session.Execute(statement);
-            //foreach (Row row in rowSet)
-            //{
-            //    return CassandraMapper.DBProductMapper(row);
-            //}
-            throw new NotImplementedException();
-        }
 
         public IEnumerable<Phonebook> GetAllPhonebook(string query, params object[] args)
         {
             phonebook_practice_app.Helper.Print($"GetAllPhonebook => {query}");
-            IEnumerable<Phonebook> auxPhonebooks= mapper.Fetch<Phonebook>(query, args);
+            IEnumerable<Phonebook> auxPhonebooks= wrapper.GetAll<Phonebook>(query, args);
             return auxPhonebooks;
         }
 
-        public Phonebook GetSinglePhonebook(string auxPhonebookId)
-        {
-            throw new NotImplementedException();
-        }
 
         public bool CreatePhonebook(Phonebook auxPhonebook)
         {
             phonebook_practice_app.Helper.Print($"CreatePhonebook => {auxPhonebook.ToString()}");
-            mapper.Insert(auxPhonebook);
+            wrapper.Create(auxPhonebook);
             return true;
         }
 
         public bool UpdatePhonebook(Phonebook auxPhonebook)
         {
             phonebook_practice_app.Helper.Print($"UpdatePhonebook => {auxPhonebook.ToString()}");
-            mapper.Update<Phonebook>("SET number=?, name = ? WHERE id = ?", auxPhonebook.Number, auxPhonebook.Name, auxPhonebook.Id);
+            wrapper.Update<Phonebook>("SET number=?, name = ? WHERE id = ?", auxPhonebook.Number, auxPhonebook.Name, auxPhonebook.Id);
             return true;
         }
 
@@ -125,40 +70,34 @@ namespace phonebook_app_read.Persistence
         public bool DeletePhonebook(string auxPhonebookId)
         {
             phonebook_practice_app.Helper.Print($"DeletePhonebook => {auxPhonebookId.ToString()}");
-            mapper.Delete<Phonebook>("WHERE id = ?", auxPhonebookId);
+            wrapper.Delete<Phonebook>("WHERE id = ?", auxPhonebookId);
             //mapper.Delete(auxPhonebookId);
             return true;
         }
 
-        public long CheckPhonebookCount(string auxPhonebookId)
-        {
-            throw new NotImplementedException();
-        }
 
         public IEnumerable<PhonebookReadName> GetAllPhonebookReadName()
         {
-            IEnumerable<PhonebookReadName> phonebookReadNames = mapper.Fetch<PhonebookReadName>("SELECT * FROM phonebookreadname");
+            IEnumerable<PhonebookReadName> phonebookReadNames = wrapper.GetAll<PhonebookReadName>("SELECT * FROM phonebookreadname");
             return phonebookReadNames;
         }
 
         public bool CreatePhonebookReadName(PhonebookReadName phonebookReadName)
         {
             phonebook_practice_app.Helper.Print($"CreatePhonebookReadName => {phonebookReadName.ToString()}");
-            mapper.Insert(phonebookReadName);
+            wrapper.Create<PhonebookReadName>(phonebookReadName);
             return true;
         }
 
         public bool DeletePhonebookReadName(PhonebookReadName phonebookReadName)
         {
             phonebook_practice_app.Helper.Print($"DeletePhonebookReadName => {phonebookReadName.ToString()}");
-            mapper.Delete<PhonebookReadName>("WHERE name = ? and number = ?", phonebookReadName.Name, phonebookReadName.Number);
+            wrapper.Delete<PhonebookReadName>("WHERE name = ? and number = ?", phonebookReadName.Name, phonebookReadName.Number);
             //mapper.Delete(auxPhonebookId);
             return true;
         }
         ~CassandraDBRepository() 
         {
-            session.Dispose();
-            cluster.Dispose();
         }
     }
 }

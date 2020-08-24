@@ -17,6 +17,7 @@ using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
 using phonebook_app_read.Controllers;
 using phonebook_app_read.Persistence;
+using phonebook_app_read.Persistence.wrapper;
 using phonebook_app_read.Service;
 
 namespace phonebook_app_read
@@ -49,11 +50,12 @@ namespace phonebook_app_read
             // If you want to set up a controller for, say, property injection
             // you can override the controller registration after populating services.
             builder.RegisterType<PhonebookController>().PropertiesAutowired();
-            builder.Register(c => CassandraDBRepository.Instance(ConfigReader.GetValue<string>("CASSANDRA_SERVER_NAME"), ConfigReader.GetValue<string>("CASSANDRA_KEYSPACE_NAME"))).As<IDBRepository>();
+            builder.Register(c => CassandraDBRepository.Instance(this.AutofacContainer)).As<IDBRepository>();
             builder.RegisterType<PhonebookReadService>().As<IPhonebookReadService>();
             builder.Register(c => PhonebookElasticSearch.Instance()).As<IPhonebookElasticSearch>();
             builder.RegisterType<PhonebookConsumerService>().As<IPhonebookConsumerService>();
-            builder.Register(c => new KafkaWrapper(ConfigReader.GetValue<string>("KafkaHost") ) ).As<IMessangerWrapper>();
+            builder.Register(c => new KafkaWrapper(ConfigReader.GetValue<string>("KafkaHost"))).As<IMessangerWrapper>();
+            builder.Register(c=> new CassandraWrapper(ConfigReader.GetValue<string>("CASSANDRA_SERVER_NAME"), ConfigReader.GetValue<string>("CASSANDRA_KEYSPACE_NAME"))).As<ICassandraWrapper>();
         }
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
         public void Configure(IApplicationBuilder app, IWebHostEnvironment env)

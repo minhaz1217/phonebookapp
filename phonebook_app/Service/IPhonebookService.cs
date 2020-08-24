@@ -9,12 +9,12 @@ namespace phonebook_app.Service
     interface IPhonebookService
     {
         IEnumerable<Phonebook> GetAll(string query);
+        IEnumerable<Phonebook> GetAllPhonebooks();
+        IEnumerable<Phonebook> GetPhonebooksById(string id);
         bool Create(Phonebook item);
         bool Update(Phonebook item);
+        bool Put(Phonebook item);
+        bool Patch(Phonebook item);
         bool Delete(Phonebook item);
-        bool PublishPost(Phonebook phonebook);
-        bool PublishPut(Phonebook phonebook);
-        bool PublishPatch(Phonebook phonebook);
-        bool PublishDelete(Phonebook phonebook);
     }
 }

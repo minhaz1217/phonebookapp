@@ -50,10 +50,11 @@ namespace phonebook_app
             //builder.RegisterType<PhonebookController>().PropertiesAutowired();
             //builder.Register(c => CassandraDBRepository.Instance(ConfigReader.GetValue<string>("CASSANDRA_SERVER_NAME"), ConfigReader.GetValue<string>("CASSANDRA_KEYSPACE_NAME"))).As<IDBRepository>();
             builder.Register(c => new KafkaWrapper(ConfigReader.GetValue<string>("KafkaConnectionString"))).As<IMessangerWrapper>();
-            builder.Register(c => new ServerConnectionProvider(ConfigReader.GetValue<string>("DapperConnectionString"))).As<IServerConnectionProvider>();
             builder.Register(c => new DBRepository(this.AutofacContainer)).As<IDBRepository>();
 
-            builder.Register(c => new ConnectionWrapper(this.AutofacContainer)).As<IConnectionWrapper>();
+            builder.Register(c => new ConnectionWrapper(this.AutofacContainer, ConfigReader.GetValue<string>("DapperConnectionString"))).As<IConnectionWrapper>();
+            builder.Register(c => new MessagePublisher(this.AutofacContainer)).As<IMessagePublisher>();
+
             builder.Register(c => new PhonebookService(this.AutofacContainer)).As<IPhonebookService>();
         }
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
