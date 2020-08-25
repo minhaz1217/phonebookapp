@@ -11,10 +11,13 @@
     <PackageReference Include="CassandraCSharpDriver" Version="3.15.1" />
     <PackageReference Include="CqlPoco" Version="1.0.0" />
     <PackageReference Include="Elasticsearch.Net" Version="7.9.0" />
+    <PackageReference Include="Microsoft.AspNetCore.Authentication.JwtBearer" Version="3.1.7" />
     <PackageReference Include="NEST" Version="7.9.0" />
+    <PackageReference Include="System.IdentityModel.Tokens.Jwt" Version="6.7.1" />
   </ItemGroup>
 
   <ItemGroup>
+    <ProjectReference Include="..\Authentication\Authentication.csproj" />
     <ProjectReference Include="..\KafkaConnection\KafkaConnection.csproj" />
     <ProjectReference Include="..\phonebook_app\phonebook_app.csproj" />
   </ItemGroup>

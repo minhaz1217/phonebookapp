@@ -12,6 +12,7 @@ using phonebook_app_read.Persistence;
 using phonebook_app_read.Persistence.mapper;
 using phonebook_app_read.Persistence.model;
 using phonebook_app_read.Service;
+using phonebook_app_read.Service.Authorization;
 
 // For more information on enabling Web API for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
 
@@ -25,10 +26,13 @@ namespace phonebook_app_read.Controllers
         private readonly ILifetimeScope container;
         private IPhonebookElasticSearch elasticsearch = null;
         private string elasticSearchIndex = "";
-        public PhonebookController(IConfiguration config, ILifetimeScope container)
+
+        private IUserService _userService;
+        public PhonebookController(IConfiguration config, ILifetimeScope container, IUserService userService)
         {
             this._appConfig = config;
             this.container = container;
+            this._userService = userService;
             this.elasticsearch = this.container.Resolve<IPhonebookElasticSearch>();
             this.elasticSearchIndex = ConfigReader.GetValue<string>("ElasticPhonebookIndex");
         }
@@ -72,6 +76,24 @@ namespace phonebook_app_read.Controllers
             }
             //phonebook_practice_app.Helper.Print($"Total : {output.Count.ToString()}");
             return Ok(output);
+        }
+
+        [HttpPost("authenticate")]
+        public IActionResult Authenticate(Service.Authorization.AuthenticateRequest model)
+        {
+            var response = _userService.Authenticate(model);
+
+            if (response == null)
+                return BadRequest(new { message = "Username or password is incorrect" });
+
+            return Ok(response);
+        }
+        [Authorize]
+        [HttpGet("{id}")]
+        public ActionResult Get(string id)
+        {
+            var users = _userService.GetAll();
+            return Ok(users);
         }
     }
 }

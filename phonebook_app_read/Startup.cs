@@ -19,6 +19,7 @@ using phonebook_app_read.Controllers;
 using phonebook_app_read.Persistence;
 using phonebook_app_read.Persistence.wrapper;
 using phonebook_app_read.Service;
+using phonebook_app_read.Service.Authorization;
 
 namespace phonebook_app_read
 {
@@ -44,6 +45,8 @@ namespace phonebook_app_read
         {
             services.AddOptions();
             services.AddControllers();
+
+            services.AddScoped<IUserService, UserService>();
         }
         public void ConfigureContainer(ContainerBuilder builder)
         {
@@ -79,6 +82,7 @@ namespace phonebook_app_read
 
             app.UseAuthorization();
 
+            app.UseMiddleware<JwtMiddleware>();
             app.UseEndpoints(endpoints =>
             {
                 endpoints.MapControllers();
