@@ -1,18 +1,17 @@
 ﻿using Autofac;
-using KafkaConnection.kafkawrapper;
-using KafkaConnection.model;
-using phonebook_app.Persistence;
-using phonebook_app_read;
-using phonebook_practice_app;
-using phonebook_practice_app.Persistence.wrapper;
-using Phonebook_Practice_App.model;
+using MessageCarrier.kafkawrapper;
+using MessageCarrier.model;
+using PhonebookWrite.Persistence;
+using PhonebookWrite;
+using PhonebookWrite.Persistence.wrapper;
+using PhonebookWrite.model;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text.Json;
 using System.Threading.Tasks;
 
-namespace phonebook_app.Service
+namespace PhonebookWrite.Service
 {
     public class PhonebookService : IPhonebookService
     {

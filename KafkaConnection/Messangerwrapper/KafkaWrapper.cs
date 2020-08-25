@@ -1,5 +1,5 @@
 ﻿using Confluent.Kafka;
-using KafkaConnection.kafkawrapper;
+using MessageCarrier.kafkawrapper;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -7,7 +7,7 @@ using System.Net;
 using System.Text;
 using System.Threading;
 
-namespace KafkaConnection.Messangerwrapper
+namespace MessageCarrier.Messangerwrapper
 {
     public class KafkaWrapper : IMessangerWrapper
     {

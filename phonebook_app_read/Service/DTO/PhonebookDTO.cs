@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 
-namespace phonebook_app_read.Service.DTO
+namespace PhonebookRead.Service.DTO
 {
     public class PhonebookDTO
     {

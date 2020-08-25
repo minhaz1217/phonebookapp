@@ -8,7 +8,7 @@ using System.Linq;
 using System.Runtime.CompilerServices;
 using System.Threading.Tasks;
 
-namespace phonebook_app_read
+namespace PhonebookRead
 {
     public class ConfigReader
     {

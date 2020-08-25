@@ -8,7 +8,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace phonebook_app_read.Service.Authorization
+namespace Authorization
 {
     public class JwtMiddleware
     {

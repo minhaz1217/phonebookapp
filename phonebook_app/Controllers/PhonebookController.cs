@@ -1,20 +1,18 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Text.Json;
-using KafkaConnection.model;
+using MessageCarrier.model;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Configuration;
-using phonebook_practice_app;
-using phonebook_practice_app.Persistence;
-using phonebook_practice_app.Persistence.wrapper;
-using Phonebook_Practice_App.model;
-using KafkaConnection.Messangerwrapper;
-using KafkaConnection.kafkawrapper;
+using PhonebookWrite.model;
+using MessageCarrier.Messangerwrapper;
+using MessageCarrier.kafkawrapper;
 using Autofac;
-using phonebook_app.Service;
+using Authorization;
+using PhonebookWrite.Service;
 
-namespace Phonebook_Practice_App.Controllers
+namespace PhonebookWrite.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
@@ -23,11 +21,27 @@ namespace Phonebook_Practice_App.Controllers
 
         private ILifetimeScope container = null;
         private IPhonebookService phonebookService = null;
-        public PhonebookController(IConfiguration config, IPhonebookService  phonebookService)
+        private IUserService _userService;
+        public PhonebookController(IConfiguration config, IPhonebookService  phonebookService, IUserService userService)
         {
             this.phonebookService = phonebookService;
+            this._userService = userService;
+        }
+
+
+
+        [HttpPost("authenticate")]
+        public IActionResult Authenticate(AuthenticateRequest model)
+        {
+            var response = _userService.Authenticate(model);
+
+            if (response == null)
+                return BadRequest(new { message = "Username or password is incorrect" });
+
+            return Ok(response);
         }
         // GET api/phonebook
+        [Authorize]
         [HttpGet]
         public ActionResult Get()
         {
@@ -36,6 +50,7 @@ namespace Phonebook_Practice_App.Controllers
         }
 
         // GET api/phonebook/5
+        [Authorize]
         [HttpGet("{id}")]
         public ActionResult Get(string id)
         {
@@ -54,9 +69,8 @@ namespace Phonebook_Practice_App.Controllers
         }
 
         // POST api/phonebook
+        [Authorize]
         [HttpPost]
-        [ProducesResponseType(StatusCodes.Status200OK)]
-        [ProducesResponseType(StatusCodes.Status404NotFound)]
         public IActionResult Post([FromBody] Phonebook phonebook)
         {
             
@@ -81,6 +95,7 @@ namespace Phonebook_Practice_App.Controllers
         }
 
         // PUT api/phonebook/5
+        [Authorize]
         [HttpPut("{id}")]
         public IActionResult Put(string id, [FromBody] Phonebook phonebook)
         {
@@ -115,6 +130,7 @@ namespace Phonebook_Practice_App.Controllers
             return Ok("Put successful");
         }
         // PATCH api/phonebook/5
+        [Authorize]
         [HttpPatch("{id}")]
         public IActionResult Patch(string id, [FromBody] Phonebook phonebook)
         {
@@ -132,7 +148,7 @@ namespace Phonebook_Practice_App.Controllers
             phonebook.Id = id;
             if(phonebook.Name == null || phonebook.Number == null)
             {
-                List<Phonebook> phonebooks = (List<Phonebook>)this.phonebookService.GetAll($"select * from phonebook where id='{phonebook.Id}'");
+                List<Phonebook> phonebooks = (List<Phonebook>)phonebookService.GetPhonebooksById(phonebook.Id);
                 foreach (Phonebook pb in phonebooks)
                 {
                     if (pb.Id == phonebook.Id)
@@ -159,7 +175,9 @@ namespace Phonebook_Practice_App.Controllers
             return Ok("Patch successful");
         }
 
+
         // DELETE api/phonebook/5
+        [Authorize]
         [HttpDelete("{id}")]
         public IActionResult Delete(string id)
         {
@@ -173,7 +191,7 @@ namespace Phonebook_Practice_App.Controllers
             {
                 return BadRequest();
             }
-            List<Phonebook> phonebooks = (List<Phonebook>)this.phonebookService.GetAll($"select * from phonebook where id='{id}'");
+            List<Phonebook> phonebooks = (List<Phonebook>)phonebookService.GetPhonebooksById(id);
             if(phonebooks.Count <= 0)
             {
                 return BadRequest();

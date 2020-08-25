@@ -2,7 +2,6 @@
 using Dapper;
 using Microsoft.Extensions.Configuration;
 using Npgsql;
-using phonebook_app.Persistence.wrapper;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
@@ -10,7 +9,7 @@ using System.Linq;
 using System.Reflection;
 using System.Text;
 
-namespace phonebook_practice_app.Persistence.wrapper
+namespace PhonebookWrite.Persistence.wrapper
 {
     public class ConnectionWrapper : IConnectionWrapper
     {

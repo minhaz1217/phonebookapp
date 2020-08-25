@@ -4,12 +4,12 @@
     "C:\\Users\\User\\source\\repos\\phonebook_app\\phonebook_app_read\\phonebook_app_read.csproj": {}
   },
   "projects": {
-    "C:\\Users\\User\\source\\repos\\phonebook_app\\Authentication\\Authentication.csproj": {
+    "C:\\Users\\User\\source\\repos\\phonebook_app\\Authentication\\Authorization.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "C:\\Users\\User\\source\\repos\\phonebook_app\\Authentication\\Authentication.csproj",
-        "projectName": "Authentication",
-        "projectPath": "C:\\Users\\User\\source\\repos\\phonebook_app\\Authentication\\Authentication.csproj",
+        "projectUniqueName": "C:\\Users\\User\\source\\repos\\phonebook_app\\Authentication\\Authorization.csproj",
+        "projectName": "Authorization",
+        "projectPath": "C:\\Users\\User\\source\\repos\\phonebook_app\\Authentication\\Authorization.csproj",
         "packagesPath": "C:\\Users\\User\\.nuget\\packages\\",
         "outputPath": "C:\\Users\\User\\source\\repos\\phonebook_app\\Authentication\\obj\\",
         "projectStyle": "PackageReference",
@@ -133,12 +133,12 @@
         }
       }
     },
-    "C:\\Users\\User\\source\\repos\\phonebook_app\\phonebook_app\\phonebook_app.csproj": {
+    "C:\\Users\\User\\source\\repos\\phonebook_app\\phonebook_app\\Phonebook.Write.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "C:\\Users\\User\\source\\repos\\phonebook_app\\phonebook_app\\phonebook_app.csproj",
-        "projectName": "phonebook_app",
-        "projectPath": "C:\\Users\\User\\source\\repos\\phonebook_app\\phonebook_app\\phonebook_app.csproj",
+        "projectUniqueName": "C:\\Users\\User\\source\\repos\\phonebook_app\\phonebook_app\\Phonebook.Write.csproj",
+        "projectName": "Phonebook.Write",
+        "projectPath": "C:\\Users\\User\\source\\repos\\phonebook_app\\phonebook_app\\Phonebook.Write.csproj",
         "packagesPath": "C:\\Users\\User\\.nuget\\packages\\",
         "outputPath": "C:\\Users\\User\\source\\repos\\phonebook_app\\phonebook_app\\obj\\",
         "projectStyle": "PackageReference",
@@ -159,6 +159,9 @@
         "frameworks": {
           "netcoreapp3.1": {
             "projectReferences": {
+              "C:\\Users\\User\\source\\repos\\phonebook_app\\Authentication\\Authorization.csproj": {
+                "projectPath": "C:\\Users\\User\\source\\repos\\phonebook_app\\Authentication\\Authorization.csproj"
+              },
               "C:\\Users\\User\\source\\repos\\phonebook_app\\KafkaConnection\\KafkaConnection.csproj": {
                 "projectPath": "C:\\Users\\User\\source\\repos\\phonebook_app\\KafkaConnection\\KafkaConnection.csproj"
               }
@@ -239,14 +242,14 @@
         "frameworks": {
           "netcoreapp3.1": {
             "projectReferences": {
-              "C:\\Users\\User\\source\\repos\\phonebook_app\\Authentication\\Authentication.csproj": {
-                "projectPath": "C:\\Users\\User\\source\\repos\\phonebook_app\\Authentication\\Authentication.csproj"
+              "C:\\Users\\User\\source\\repos\\phonebook_app\\Authentication\\Authorization.csproj": {
+                "projectPath": "C:\\Users\\User\\source\\repos\\phonebook_app\\Authentication\\Authorization.csproj"
               },
               "C:\\Users\\User\\source\\repos\\phonebook_app\\KafkaConnection\\KafkaConnection.csproj": {
                 "projectPath": "C:\\Users\\User\\source\\repos\\phonebook_app\\KafkaConnection\\KafkaConnection.csproj"
               },
-              "C:\\Users\\User\\source\\repos\\phonebook_app\\phonebook_app\\phonebook_app.csproj": {
-                "projectPath": "C:\\Users\\User\\source\\repos\\phonebook_app\\phonebook_app\\phonebook_app.csproj"
+              "C:\\Users\\User\\source\\repos\\phonebook_app\\phonebook_app\\Phonebook.Write.csproj": {
+                "projectPath": "C:\\Users\\User\\source\\repos\\phonebook_app\\phonebook_app\\Phonebook.Write.csproj"
               }
             }
           }

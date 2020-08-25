@@ -3,10 +3,11 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
+using Authorization;
 using Autofac;
 using Autofac.Extensions.DependencyInjection;
-using KafkaConnection.kafkawrapper;
-using KafkaConnection.Messangerwrapper;
+using MessageCarrier.kafkawrapper;
+using MessageCarrier.Messangerwrapper;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.HttpsPolicy;
@@ -15,13 +16,12 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
-using phonebook_app_read.Controllers;
-using phonebook_app_read.Persistence;
-using phonebook_app_read.Persistence.wrapper;
-using phonebook_app_read.Service;
-using phonebook_app_read.Service.Authorization;
+using PhonebookRead.Controllers;
+using PhonebookRead.Persistence;
+using PhonebookRead.Persistence.wrapper;
+using PhonebookRead.Service;
 
-namespace phonebook_app_read
+namespace PhonebookRead
 {
     public class Startup
     {
@@ -45,7 +45,6 @@ namespace phonebook_app_read
         {
             services.AddOptions();
             services.AddControllers();
-
             services.AddScoped<IUserService, UserService>();
         }
         public void ConfigureContainer(ContainerBuilder builder)

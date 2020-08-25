@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 
-namespace phonebook_app.Persistence.wrapper
+namespace PhonebookWrite.Persistence.wrapper
 {
     [System.AttributeUsage(System.AttributeTargets.Property )]
     public class WrapperTableAttribute : Attribute

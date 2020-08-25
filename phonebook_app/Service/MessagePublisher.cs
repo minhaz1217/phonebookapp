@@ -1,15 +1,15 @@
 ﻿using Autofac;
-using KafkaConnection.kafkawrapper;
-using KafkaConnection.model;
-using phonebook_practice_app;
-using Phonebook_Practice_App.model;
+using MessageCarrier.kafkawrapper;
+using MessageCarrier.model;
+using PhonebookWrite;
+using PhonebookWrite.model;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text.Json;
 using System.Threading.Tasks;
 
-namespace phonebook_app.Service
+namespace PhonebookWrite.Service
 {
     public class MessagePublisher : IMessagePublisher
     {

@@ -4,7 +4,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 
-namespace phonebook_app_read.Persistence.model
+namespace PhonebookRead.Persistence.model
 {
     [ElasticsearchType(IdProperty = nameof(Name))]
     public class PhonebookReadName

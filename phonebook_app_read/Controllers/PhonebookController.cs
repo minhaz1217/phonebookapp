@@ -4,19 +4,19 @@ using System.Linq;
 using System.Text;
 using System.Text.Json;
 using System.Threading.Tasks;
+using Authorization;
 using Autofac;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Configuration;
 using Nest;
-using phonebook_app_read.Persistence;
-using phonebook_app_read.Persistence.mapper;
-using phonebook_app_read.Persistence.model;
-using phonebook_app_read.Service;
-using phonebook_app_read.Service.Authorization;
+using PhonebookRead.Persistence;
+using PhonebookRead.Persistence.mapper;
+using PhonebookRead.Persistence.model;
+using PhonebookRead.Service;
 
 // For more information on enabling Web API for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
 
-namespace phonebook_app_read.Controllers
+namespace PhonebookRead.Controllers
 {
     [Route("phonebook/")]
     [ApiController]
@@ -37,6 +37,7 @@ namespace phonebook_app_read.Controllers
             this.elasticSearchIndex = ConfigReader.GetValue<string>("ElasticPhonebookIndex");
         }
         // GET: api/<Phonebook>
+        [Authorize]
         [HttpGet]
         public ActionResult Get()
         {
@@ -47,7 +48,7 @@ namespace phonebook_app_read.Controllers
             if (!String.IsNullOrEmpty(HttpContext.Request.Query["name"]))
             {
                 string value = HttpContext.Request.Query["name"];
-                phonebook_practice_app.Helper.Print($"Searching : {value}");
+                PhonebookWrite.Helper.Print($"Searching : {value}");
                 var phonebooks = this.elasticsearch.GetAll(this.elasticSearchIndex, "name", value);
                 foreach(Phonebook pb in phonebooks)
                 {
@@ -58,7 +59,7 @@ namespace phonebook_app_read.Controllers
             else if (!String.IsNullOrEmpty(HttpContext.Request.Query["number"]))
             {
                 string value = HttpContext.Request.Query["number"];
-                phonebook_practice_app.Helper.Print($"Searching : {value}");
+                PhonebookWrite.Helper.Print($"Searching : {value}");
                 var phonebooks = this.elasticsearch.GetAll(this.elasticSearchIndex, "number", value);
                 foreach (Phonebook pb in phonebooks)
                 {
@@ -79,7 +80,7 @@ namespace phonebook_app_read.Controllers
         }
 
         [HttpPost("authenticate")]
-        public IActionResult Authenticate(Service.Authorization.AuthenticateRequest model)
+        public IActionResult Authenticate(Authorization.AuthenticateRequest model)
         {
             var response = _userService.Authenticate(model);
 

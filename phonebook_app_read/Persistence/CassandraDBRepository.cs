@@ -3,15 +3,15 @@ using Cassandra;
 using Cassandra.Mapping;
 using CqlPoco;
 using Microsoft.VisualBasic.CompilerServices;
-using phonebook_app_read.Persistence.model;
-using phonebook_app_read.Persistence.wrapper;
-using phonebook_practice_app;
+using PhonebookRead.Persistence.model;
+using PhonebookRead.Persistence.wrapper;
+using PhonebookRead;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Runtime.CompilerServices;
 using System.Threading.Tasks;
-namespace phonebook_app_read.Persistence
+namespace PhonebookRead.Persistence
 {
     public class CassandraDBRepository : IDBRepository
     {
@@ -45,7 +45,7 @@ namespace phonebook_app_read.Persistence
 
         public IEnumerable<Phonebook> GetAllPhonebook(string query, params object[] args)
         {
-            phonebook_practice_app.Helper.Print($"GetAllPhonebook => {query}");
+            PhonebookRead.Helper.Print($"GetAllPhonebook => {query}");
             IEnumerable<Phonebook> auxPhonebooks= wrapper.GetAll<Phonebook>(query, args);
             return auxPhonebooks;
         }
@@ -53,14 +53,14 @@ namespace phonebook_app_read.Persistence
 
         public bool CreatePhonebook(Phonebook auxPhonebook)
         {
-            phonebook_practice_app.Helper.Print($"CreatePhonebook => {auxPhonebook.ToString()}");
+            PhonebookRead.Helper.Print($"CreatePhonebook => {auxPhonebook.ToString()}");
             wrapper.Create(auxPhonebook);
             return true;
         }
 
         public bool UpdatePhonebook(Phonebook auxPhonebook)
         {
-            phonebook_practice_app.Helper.Print($"UpdatePhonebook => {auxPhonebook.ToString()}");
+            PhonebookRead.Helper.Print($"UpdatePhonebook => {auxPhonebook.ToString()}");
             wrapper.Update<Phonebook>("SET number=?, name = ? WHERE id = ?", auxPhonebook.Number, auxPhonebook.Name, auxPhonebook.Id);
             return true;
         }
@@ -68,7 +68,7 @@ namespace phonebook_app_read.Persistence
 
         public bool DeletePhonebook(string auxPhonebookId)
         {
-            phonebook_practice_app.Helper.Print($"DeletePhonebook => {auxPhonebookId.ToString()}");
+            PhonebookRead.Helper.Print($"DeletePhonebook => {auxPhonebookId.ToString()}");
             wrapper.Delete<Phonebook>("WHERE id = ?", auxPhonebookId);
             //mapper.Delete(auxPhonebookId);
             return true;
@@ -83,14 +83,14 @@ namespace phonebook_app_read.Persistence
 
         public bool CreatePhonebookReadName(PhonebookReadName phonebookReadName)
         {
-            phonebook_practice_app.Helper.Print($"CreatePhonebookReadName => {phonebookReadName.ToString()}");
+            PhonebookRead.Helper.Print($"CreatePhonebookReadName => {phonebookReadName.ToString()}");
             wrapper.Create<PhonebookReadName>(phonebookReadName);
             return true;
         }
 
         public bool DeletePhonebookReadName(PhonebookReadName phonebookReadName)
         {
-            phonebook_practice_app.Helper.Print($"DeletePhonebookReadName => {phonebookReadName.ToString()}");
+            PhonebookRead.Helper.Print($"DeletePhonebookReadName => {phonebookReadName.ToString()}");
             wrapper.Delete<PhonebookReadName>("WHERE name = ? and number = ?", phonebookReadName.Name, phonebookReadName.Number);
             //mapper.Delete(auxPhonebookId);
             return true;

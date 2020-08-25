@@ -1,16 +1,16 @@
 ﻿using Autofac;
 using Dapper;
 using Npgsql;
-using phonebook_practice_app;
-using phonebook_practice_app.Persistence;
-using phonebook_practice_app.Persistence.wrapper;
-using Phonebook_Practice_App.model;
+using PhonebookWrite;
+using PhonebookWrite.Persistence;
+using PhonebookWrite.Persistence.wrapper;
+using PhonebookWrite.model;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 
-namespace phonebook_app.Persistence
+namespace PhonebookWrite.Persistence
 {
     public class DBRepository :IDBRepository
     {

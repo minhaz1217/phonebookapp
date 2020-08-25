@@ -9,7 +9,7 @@ using System.Threading.Tasks;
 
 
 
-namespace phonebook_app_read.Service.Authorization
+namespace Authorization
 {
 
     public interface IUserService

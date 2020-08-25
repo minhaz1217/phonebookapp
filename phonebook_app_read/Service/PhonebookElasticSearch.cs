@@ -1,14 +1,15 @@
 ﻿using Nest;
-using phonebook_app_read.Persistence.model;
-using phonebook_practice_app;
+using PhonebookRead.Persistence.model;
+using PhonebookRead;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Linq;
 using System.Runtime.InteropServices.ComTypes;
 using System.Threading.Tasks;
+using PhonebookWrite;
 
-namespace phonebook_app_read.Service
+namespace PhonebookRead.Service
 {
     public class PhonebookElasticSearch: IPhonebookElasticSearch
     {

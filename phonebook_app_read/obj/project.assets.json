@@ -1262,7 +1262,7 @@
           "lib/netstandard1.3/System.Xml.XmlDocument.dll": {}
         }
       },
-      "Authentication/1.0.0": {
+      "Authorization/1.0.0": {
         "type": "project",
         "framework": ".NETCoreApp,Version=v3.1",
         "dependencies": {
@@ -1270,43 +1270,44 @@
           "System.IdentityModel.Tokens.Jwt": "6.7.1"
         },
         "compile": {
-          "bin/placeholder/Authentication.dll": {}
+          "bin/placeholder/Authorization.dll": {}
         },
         "runtime": {
-          "bin/placeholder/Authentication.dll": {}
+          "bin/placeholder/Authorization.dll": {}
         },
         "frameworkReferences": [
           "Microsoft.AspNetCore.App"
         ]
       },
-      "KafkaConnection/1.0.0": {
+      "MessageCarrier/1.0.0": {
         "type": "project",
         "framework": ".NETCoreApp,Version=v3.1",
         "dependencies": {
           "Confluent.Kafka": "1.5.0"
         },
         "compile": {
-          "bin/placeholder/KafkaConnection.dll": {}
+          "bin/placeholder/MessageCarrier.dll": {}
         },
         "runtime": {
-          "bin/placeholder/KafkaConnection.dll": {}
+          "bin/placeholder/MessageCarrier.dll": {}
         }
       },
-      "phonebook_app/1.0.0": {
+      "Phonebook.Write/1.0.0": {
         "type": "project",
         "framework": ".NETCoreApp,Version=v3.1",
         "dependencies": {
+          "Authorization": "1.0.0",
           "Autofac": "5.2.0",
           "Autofac.Extensions.DependencyInjection": "6.0.0",
           "Dapper": "2.0.35",
-          "KafkaConnection": "1.0.0",
+          "MessageCarrier": "1.0.0",
           "Npgsql": "4.1.4"
         },
         "compile": {
-          "bin/placeholder/phonebook_app.dll": {}
+          "bin/placeholder/Phonebook.Write.dll": {}
         },
         "runtime": {
-          "bin/placeholder/phonebook_app.dll": {}
+          "bin/placeholder/Phonebook.Write.dll": {}
         },
         "frameworkReferences": [
           "Microsoft.AspNetCore.App"
@@ -4806,36 +4807,36 @@
         "system.xml.xmldocument.nuspec"
       ]
     },
-    "Authentication/1.0.0": {
+    "Authorization/1.0.0": {
       "type": "project",
-      "path": "../Authentication/Authentication.csproj",
-      "msbuildProject": "../Authentication/Authentication.csproj"
+      "path": "../Authentication/Authorization.csproj",
+      "msbuildProject": "../Authentication/Authorization.csproj"
     },
-    "KafkaConnection/1.0.0": {
+    "MessageCarrier/1.0.0": {
       "type": "project",
-      "path": "../KafkaConnection/KafkaConnection.csproj",
-      "msbuildProject": "../KafkaConnection/KafkaConnection.csproj"
+      "path": "../KafkaConnection/MessageCarrier.csproj",
+      "msbuildProject": "../KafkaConnection/MessageCarrier.csproj"
     },
-    "phonebook_app/1.0.0": {
+    "Phonebook.Write/1.0.0": {
       "type": "project",
-      "path": "../phonebook_app/phonebook_app.csproj",
-      "msbuildProject": "../phonebook_app/phonebook_app.csproj"
+      "path": "../phonebook_app/Phonebook.Write.csproj",
+      "msbuildProject": "../phonebook_app/Phonebook.Write.csproj"
     }
   },
   "projectFileDependencyGroups": {
     ".NETCoreApp,Version=v3.1": [
-      "Authentication >= 1.0.0",
+      "Authorization >= 1.0.0",
       "Autofac >= 5.2.0",
       "Autofac.Extensions.DependencyInjection >= 6.0.0",
       "Bogus >= 30.0.4",
       "CassandraCSharpDriver >= 3.15.1",
       "CqlPoco >= 1.0.0",
       "Elasticsearch.Net >= 7.9.0",
-      "KafkaConnection >= 1.0.0",
+      "MessageCarrier >= 1.0.0",
       "Microsoft.AspNetCore.Authentication.JwtBearer >= 3.1.7",
       "NEST >= 7.9.0",
-      "System.IdentityModel.Tokens.Jwt >= 6.7.1",
-      "phonebook_app >= 1.0.0"
+      "Phonebook.Write >= 1.0.0",
+      "System.IdentityModel.Tokens.Jwt >= 6.7.1"
     ]
   },
   "packageFolders": {
@@ -4845,9 +4846,9 @@
   "project": {
     "version": "1.0.0",
     "restore": {
-      "projectUniqueName": "C:\\Users\\User\\source\\repos\\phonebook_app\\phonebook_app_read\\phonebook_app_read.csproj",
-      "projectName": "phonebook_app_read",
-      "projectPath": "C:\\Users\\User\\source\\repos\\phonebook_app\\phonebook_app_read\\phonebook_app_read.csproj",
+      "projectUniqueName": "C:\\Users\\User\\source\\repos\\phonebook_app\\phonebook_app_read\\Phonebook.Read.csproj",
+      "projectName": "Phonebook.Read",
+      "projectPath": "C:\\Users\\User\\source\\repos\\phonebook_app\\phonebook_app_read\\Phonebook.Read.csproj",
       "packagesPath": "C:\\Users\\User\\.nuget\\packages\\",
       "outputPath": "C:\\Users\\User\\source\\repos\\phonebook_app\\phonebook_app_read\\obj\\",
       "projectStyle": "PackageReference",
@@ -4868,14 +4869,14 @@
       "frameworks": {
         "netcoreapp3.1": {
           "projectReferences": {
-            "C:\\Users\\User\\source\\repos\\phonebook_app\\Authentication\\Authentication.csproj": {
-              "projectPath": "C:\\Users\\User\\source\\repos\\phonebook_app\\Authentication\\Authentication.csproj"
+            "C:\\Users\\User\\source\\repos\\phonebook_app\\Authentication\\Authorization.csproj": {
+              "projectPath": "C:\\Users\\User\\source\\repos\\phonebook_app\\Authentication\\Authorization.csproj"
             },
-            "C:\\Users\\User\\source\\repos\\phonebook_app\\KafkaConnection\\KafkaConnection.csproj": {
-              "projectPath": "C:\\Users\\User\\source\\repos\\phonebook_app\\KafkaConnection\\KafkaConnection.csproj"
+            "C:\\Users\\User\\source\\repos\\phonebook_app\\KafkaConnection\\MessageCarrier.csproj": {
+              "projectPath": "C:\\Users\\User\\source\\repos\\phonebook_app\\KafkaConnection\\MessageCarrier.csproj"
             },
-            "C:\\Users\\User\\source\\repos\\phonebook_app\\phonebook_app\\phonebook_app.csproj": {
-              "projectPath": "C:\\Users\\User\\source\\repos\\phonebook_app\\phonebook_app\\phonebook_app.csproj"
+            "C:\\Users\\User\\source\\repos\\phonebook_app\\phonebook_app\\Phonebook.Write.csproj": {
+              "projectPath": "C:\\Users\\User\\source\\repos\\phonebook_app\\phonebook_app\\Phonebook.Write.csproj"
             }
           }
         }

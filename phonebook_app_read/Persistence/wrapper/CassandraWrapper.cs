@@ -5,7 +5,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 
-namespace phonebook_app_read.Persistence.wrapper
+namespace PhonebookRead.Persistence.wrapper
 {
     public class CassandraWrapper : ICassandraWrapper
     {

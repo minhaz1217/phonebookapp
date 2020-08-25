@@ -17,9 +17,9 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\Authentication\Authentication.csproj" />
-    <ProjectReference Include="..\KafkaConnection\KafkaConnection.csproj" />
-    <ProjectReference Include="..\phonebook_app\phonebook_app.csproj" />
+    <ProjectReference Include="..\Authentication\Authorization.csproj" />
+    <ProjectReference Include="..\KafkaConnection\MessageCarrier.csproj" />
+    <ProjectReference Include="..\phonebook_app\Phonebook.Write.csproj" />
   </ItemGroup>
 
 

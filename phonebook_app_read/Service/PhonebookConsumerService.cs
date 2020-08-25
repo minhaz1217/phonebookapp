@@ -1,13 +1,13 @@
 ﻿using Autofac;
-using KafkaConnection.kafkawrapper;
-using KafkaConnection.Messangerwrapper;
-using KafkaConnection.model;
+using MessageCarrier.kafkawrapper;
+using MessageCarrier.Messangerwrapper;
+using MessageCarrier.model;
 using Microsoft.Extensions.Configuration;
-using phonebook_app_read.Persistence;
-using phonebook_app_read.Persistence.mapper;
-using phonebook_app_read.Persistence.model;
-using phonebook_app_read.Service;
-using phonebook_practice_app;
+using PhonebookRead.Persistence;
+using PhonebookRead.Persistence.mapper;
+using PhonebookRead.Persistence.model;
+using PhonebookRead.Service;
+using PhonebookRead;
 using System;
 using System.Collections.Generic;
 using System.IO;
@@ -15,8 +15,9 @@ using System.Linq;
 using System.Text.Json;
 using System.Threading;
 using System.Threading.Tasks;
+using PhonebookRead;
 
-namespace phonebook_app_read
+namespace PhonebookRead
 {
     public class PhonebookConsumerService : IPhonebookConsumerService
     {

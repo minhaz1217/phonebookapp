@@ -1,0 +1,8 @@
+C:\Users\User\source\repos\phonebook_app\Authentication\bin\Debug\netcoreapp3.1\Authentication.deps.json
+C:\Users\User\source\repos\phonebook_app\Authentication\bin\Debug\netcoreapp3.1\Authentication.dll
+C:\Users\User\source\repos\phonebook_app\Authentication\bin\Debug\netcoreapp3.1\Authentication.pdb
+C:\Users\User\source\repos\phonebook_app\Authentication\obj\Debug\netcoreapp3.1\Authentication.AssemblyInfoInputs.cache
+C:\Users\User\source\repos\phonebook_app\Authentication\obj\Debug\netcoreapp3.1\Authentication.AssemblyInfo.cs
+C:\Users\User\source\repos\phonebook_app\Authentication\obj\Debug\netcoreapp3.1\Authentication.csproj.CoreCompileInputs.cache
+C:\Users\User\source\repos\phonebook_app\Authentication\obj\Debug\netcoreapp3.1\Authentication.dll
+C:\Users\User\source\repos\phonebook_app\Authentication\obj\Debug\netcoreapp3.1\Authentication.pdb

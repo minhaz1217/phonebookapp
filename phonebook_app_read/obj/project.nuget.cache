@@ -1,8 +1,8 @@
 {
   "version": 2,
-  "dgSpecHash": "ye/g9YifJPFo6aGzclcqltzfnnfT8GZQIJsuPd3DYSBHB63a2gUQFp7mg6diEq47+DXTKbjKTao5q9w/QPAdSw==",
+  "dgSpecHash": "upHOoeF8OsBI4uSTzguSsSl5P4r5Tmax1cEw8+M01BiFwdZX3Zzdqsv/iLb6DH/ALs80dwFiEEBxrB9+9Iatlg==",
   "success": true,
-  "projectFilePath": "C:\\Users\\User\\source\\repos\\phonebook_app\\phonebook_app_read\\phonebook_app_read.csproj",
+  "projectFilePath": "C:\\Users\\User\\source\\repos\\phonebook_app\\phonebook_app_read\\Phonebook.Read.csproj",
   "expectedPackageFiles": [
     "C:\\Users\\User\\.nuget\\packages\\autofac\\5.2.0\\autofac.5.2.0.nupkg.sha512",
     "C:\\Users\\User\\.nuget\\packages\\autofac.extensions.dependencyinjection\\6.0.0\\autofac.extensions.dependencyinjection.6.0.0.nupkg.sha512",

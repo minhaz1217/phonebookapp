@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.Text;
 
-namespace KafkaConnection.model
+namespace MessageCarrier.model
 {
     public class WrapperModel<T>
     {

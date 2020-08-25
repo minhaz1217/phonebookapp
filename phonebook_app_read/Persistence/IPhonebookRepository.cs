@@ -1,10 +1,10 @@
-﻿using phonebook_app_read.Persistence.model;
+﻿using PhonebookRead.Persistence.model;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 
-namespace phonebook_app_read.Persistence
+namespace PhonebookRead.Persistence
 {
     // This is the interface for the table AuxPhonebook where we keep demo data similar to the write table with (id, name, number)
     public interface IPhonebookRepository

@@ -9,19 +9,19 @@ using Autofac.Extensions.DependencyInjection;
 using Bogus;
 using Confluent.Kafka;
 using Elasticsearch.Net;
-using KafkaConnection.kafkawrapper;
-using KafkaConnection.Messangerwrapper;
+using MessageCarrier.kafkawrapper;
+using MessageCarrier.Messangerwrapper;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
-using phonebook_app_read.Persistence;
-using phonebook_app_read.Persistence.model;
-using phonebook_app_read.Service;
-using phonebook_practice_app;
-using phonebook_practice_app.Persistence.wrapper;
+using PhonebookRead.Persistence;
+using PhonebookRead.Persistence.model;
+using PhonebookRead.Service;
+using PhonebookRead;
+using PhonebookRead.Persistence.wrapper;
 
-namespace phonebook_app_read
+namespace PhonebookRead
 {
     public class Program
     {

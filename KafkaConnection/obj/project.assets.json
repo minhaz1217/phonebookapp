@@ -216,9 +216,9 @@
   "project": {
     "version": "1.0.0",
     "restore": {
-      "projectUniqueName": "C:\\Users\\User\\source\\repos\\phonebook_app\\KafkaConnection\\KafkaConnection.csproj",
-      "projectName": "KafkaConnection",
-      "projectPath": "C:\\Users\\User\\source\\repos\\phonebook_app\\KafkaConnection\\KafkaConnection.csproj",
+      "projectUniqueName": "C:\\Users\\User\\source\\repos\\phonebook_app\\KafkaConnection\\MessageCarrier.csproj",
+      "projectName": "MessageCarrier",
+      "projectPath": "C:\\Users\\User\\source\\repos\\phonebook_app\\KafkaConnection\\MessageCarrier.csproj",
       "packagesPath": "C:\\Users\\User\\.nuget\\packages\\",
       "outputPath": "C:\\Users\\User\\source\\repos\\phonebook_app\\KafkaConnection\\obj\\",
       "projectStyle": "PackageReference",

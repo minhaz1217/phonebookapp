@@ -7,10 +7,8 @@ using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
-using phonebook_app.Persistence;
-using phonebook_app_read;
 
-namespace phonebook_app
+namespace PhonebookWrite
 {
     public class Program
     {

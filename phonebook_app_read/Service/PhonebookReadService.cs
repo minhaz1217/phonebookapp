@@ -1,13 +1,13 @@
 ﻿using Autofac;
-using phonebook_app_read.Persistence;
-using phonebook_app_read.Persistence.model;
-using phonebook_app_read.Service.DTO;
+using PhonebookRead.Persistence;
+using PhonebookRead.Persistence.model;
+using PhonebookRead.Service.DTO;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 
-namespace phonebook_app_read.Service
+namespace PhonebookRead.Service
 {
     public class PhonebookReadService : IPhonebookReadService
     {

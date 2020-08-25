@@ -1,10 +1,10 @@
-﻿using Phonebook_Practice_App.model;
+﻿using PhonebookWrite.model;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 
-namespace phonebook_app.Service
+namespace PhonebookWrite.Service
 {
     public interface IPhonebookService
     {

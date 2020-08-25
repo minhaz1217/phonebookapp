@@ -3519,9 +3519,9 @@
   "project": {
     "version": "1.0.0",
     "restore": {
-      "projectUniqueName": "C:\\Users\\User\\source\\repos\\phonebook_app\\Authentication\\Authentication.csproj",
-      "projectName": "Authentication",
-      "projectPath": "C:\\Users\\User\\source\\repos\\phonebook_app\\Authentication\\Authentication.csproj",
+      "projectUniqueName": "C:\\Users\\User\\source\\repos\\phonebook_app\\Authentication\\Authorization.csproj",
+      "projectName": "Authorization",
+      "projectPath": "C:\\Users\\User\\source\\repos\\phonebook_app\\Authentication\\Authorization.csproj",
       "packagesPath": "C:\\Users\\User\\.nuget\\packages\\",
       "outputPath": "C:\\Users\\User\\source\\repos\\phonebook_app\\Authentication\\obj\\",
       "projectStyle": "PackageReference",
