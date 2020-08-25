@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace phonebook_app.Persistence
 {
-    interface IDBRepository
+    public interface IDBRepository
 
     {
         IEnumerable<Phonebook> GetAllPhonebooks(string query);

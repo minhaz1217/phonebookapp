@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace phonebook_app.Service
 {
-    interface IPhonebookService
+    public interface IPhonebookService
     {
         IEnumerable<Phonebook> GetAll(string query);
         IEnumerable<Phonebook> GetAllPhonebooks();

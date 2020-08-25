@@ -16,16 +16,15 @@ namespace phonebook_app_read.Persistence
     public class CassandraDBRepository : IDBRepository
     {
 
-        public ILifetimeScope container { get; private set; }
         private static CassandraDBRepository instance = null;
         private static ICassandraWrapper wrapper = null;
         private CassandraDBRepository() { }
-        public static CassandraDBRepository Instance(ILifetimeScope container)
+        public static CassandraDBRepository Instance(ICassandraWrapper wrap)
         {
             if (instance == null)
             {
                 instance = new CassandraDBRepository();
-                wrapper = container.Resolve<ICassandraWrapper>();
+                wrapper = wrap;
             }
             #if DEBUG
                 if (!wrapper.TableExists("phonebookreadname"))

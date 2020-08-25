@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace phonebook_app_read.Persistence
 {
-    interface IPhonebookReadNameRepository
+    public interface IPhonebookReadNameRepository
     {
 
         IEnumerable<PhonebookReadName> GetAllPhonebookReadName();

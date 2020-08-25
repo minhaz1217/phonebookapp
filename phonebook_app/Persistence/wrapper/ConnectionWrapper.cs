@@ -2,6 +2,7 @@
 using Dapper;
 using Microsoft.Extensions.Configuration;
 using Npgsql;
+using phonebook_app.Persistence.wrapper;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
@@ -17,7 +18,7 @@ namespace phonebook_practice_app.Persistence.wrapper
         private string _connectionString = "";
 
 
-        public ConnectionWrapper(ILifetimeScope container, string connectionString)
+        public ConnectionWrapper(string connectionString)
         {
             if (connection == null)
             {
@@ -29,15 +30,6 @@ namespace phonebook_practice_app.Persistence.wrapper
                 }
             }
         }
-        public static List<string> GenerateListOfProperties(IEnumerable<PropertyInfo> listOfProperties)
-        {
-            return (from prop in listOfProperties
-                    let attributes = prop.GetCustomAttributes(typeof(DescriptionAttribute), false)
-                    where attributes.Length <= 0 || (attributes[0] as DescriptionAttribute)?.Description != "ignore"
-                    select prop.Name).ToList();
-        }
-
-
         private string GenerateInsertQuery<T>(T item)
         {
             string tableName = typeof(T).Name.ToString().ToLower();
@@ -49,8 +41,8 @@ namespace phonebook_practice_app.Persistence.wrapper
             //  where attributes.Length <= 0 || (attributes[0] as DescriptionAttribute)?.Description != "ignore" select prop.Name
             foreach (PropertyInfo prop in typeof(T).GetProperties())
             {
-                var attributes = prop.GetCustomAttributes(typeof(DescriptionAttribute), false);
-                if(attributes.Length <=0 || ((attributes[0] as DescriptionAttribute)?.Description != "ignore"))
+                var attributes = prop.GetCustomAttributes(typeof(WrapperTableAttribute), false);
+                if(attributes.Length <=0 || ((attributes[0] as WrapperTableAttribute)?.Name != "ignore"))
                 {
                     object propValue = prop.GetValue(item, null);
                     myDict[prop.Name] = propValue;
@@ -96,8 +88,8 @@ namespace phonebook_practice_app.Persistence.wrapper
                 StringBuilder stringBuilder = new StringBuilder($"delete from {tableName} where ");
                 foreach (PropertyInfo prop in typeof(T).GetProperties())
                 {
-                    var attributes = prop.GetCustomAttributes(typeof(DescriptionAttribute), false);
-                    if (attributes.Length <= 0 || ((attributes[0] as DescriptionAttribute)?.Description == "primary"))
+                    var attributes = prop.GetCustomAttributes(typeof(WrapperTableAttribute), false);
+                    if (attributes.Length <= 0 || ((attributes[0] as WrapperTableAttribute)?.Name == "primary"))
                     {
                         object propValue = prop.GetValue(item, null);
                         stringBuilder.Append($"{prop.Name} = ");
@@ -139,11 +131,11 @@ namespace phonebook_practice_app.Persistence.wrapper
             //  where attributes.Length <= 0 || (attributes[0] as DescriptionAttribute)?.Description != "ignore" select prop.Name
             foreach (PropertyInfo prop in typeof(T).GetProperties())
             {
-                var attributes = prop.GetCustomAttributes(typeof(DescriptionAttribute), false);
-                if (attributes.Length <= 0 || ((attributes[0] as DescriptionAttribute)?.Description != "ignore"))
+                var attributes = prop.GetCustomAttributes(typeof(WrapperTableAttribute), false);
+                if (attributes.Length <= 0 || ((attributes[0] as WrapperTableAttribute)?.Name != "ignore"))
                 {
                     Helper.Print(attributes.Length.ToString());
-                    if( attributes.Length > 0 && (attributes[0] as DescriptionAttribute)?.Description == "primary")
+                    if( attributes.Length > 0 && (attributes[0] as WrapperTableAttribute)?.Name == "primary")
                     {
                         wherePart.Append($"");
                         object propValue = prop.GetValue(item, null);

@@ -23,10 +23,9 @@ namespace Phonebook_Practice_App.Controllers
 
         private ILifetimeScope container = null;
         private IPhonebookService phonebookService = null;
-        public PhonebookController(IConfiguration config, ILifetimeScope container)
+        public PhonebookController(IConfiguration config, IPhonebookService  phonebookService)
         {
-            this.container = container;
-            phonebookService = this.container.Resolve<IPhonebookService>();
+            this.phonebookService = phonebookService;
         }
         // GET api/phonebook
         [HttpGet]

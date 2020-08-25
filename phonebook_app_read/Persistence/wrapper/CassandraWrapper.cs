@@ -59,11 +59,6 @@ namespace phonebook_app_read.Persistence.wrapper
         }
 
 
-        ~CassandraWrapper()
-        {
-            session.Dispose();
-            cluster.Dispose();
-        }
 
         public bool TableExists(string tableName)
         {
@@ -90,6 +85,12 @@ namespace phonebook_app_read.Persistence.wrapper
             {
                 return false;
             }
+        }
+
+        ~CassandraWrapper()
+        {
+            session.Dispose();
+            cluster.Dispose();
         }
     }
 }

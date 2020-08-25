@@ -5,7 +5,7 @@ using System.Threading.Tasks;
 
 namespace phonebook_app_read.Persistence.wrapper
 {
-    interface ICassandraWrapper
+    public interface ICassandraWrapper
     {
         bool TableExists(string tableName);
         bool CreateTable(string query);

@@ -17,14 +17,13 @@ namespace phonebook_app.Service
     public class PhonebookService : IPhonebookService
     {
         private string kafkaTopic = "phonebook.incoming";
-        private ILifetimeScope container = null;
         private IMessagePublisher messagePublisher = null;
         private IDBRepository dbRepository = null;
-        public PhonebookService(ILifetimeScope container)
+        public PhonebookService(IMessagePublisher messagePublisher, IDBRepository dbRepository)
         {
-            this.container = container;
-            this.messagePublisher = this.container.Resolve<IMessagePublisher>();
-            this.dbRepository = this.container.Resolve<IDBRepository>();
+            this.messagePublisher = messagePublisher;
+            //this.messagePublisher = this.container.Resolve<IMessagePublisher>();
+            this.dbRepository = dbRepository;
         }
         public bool Create(Phonebook phonebook)
         {

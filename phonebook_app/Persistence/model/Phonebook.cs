@@ -5,13 +5,14 @@ using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.ModelBinding;
+using phonebook_app.Persistence.wrapper;
 
 namespace Phonebook_Practice_App.model
 {
     public class Phonebook
     {
         const string TABLE_NAME = "phonebook";
-        [Description("primary")]
+        [WrapperTable("primary")]
         public string Id { get; set; }
         public string Name { get; set; }
         public string Number { get; set; }

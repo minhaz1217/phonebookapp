@@ -11,15 +11,15 @@ namespace phonebook_app_read.Service
 {
     public class PhonebookReadService : IPhonebookReadService
     {
-
-        private readonly ILifetimeScope container;
-        public PhonebookReadService(ILifetimeScope container)
+        IDBRepository db = null;
+        //private readonly ILifetimeScope container;
+        public PhonebookReadService(IDBRepository dBRepository)
         {
-            this.container = container;
+            this.db = dBRepository;
         }
         public IEnumerable<PhonebookReadName> GetAll()
         {
-            IDBRepository db = this.container.Resolve<IDBRepository>();
+            
             IEnumerable<PhonebookReadName> phonebookReadNames = db.GetAllPhonebookReadName();
             return phonebookReadNames;
         }

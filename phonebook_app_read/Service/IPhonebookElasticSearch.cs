@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace phonebook_app_read.Service
 {
-    interface IPhonebookElasticSearch
+    public interface IPhonebookElasticSearch
     {
         bool Insert(string index, Phonebook phonebook);
         bool Update(string index, Phonebook phonebook);

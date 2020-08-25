@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace phonebook_app.Service
 {
-    interface IMessagePublisher
+    public interface IMessagePublisher
     {
 
         bool PublishPost(Phonebook phonebook);

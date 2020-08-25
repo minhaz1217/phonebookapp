@@ -50,12 +50,14 @@ namespace phonebook_app
             //builder.RegisterType<PhonebookController>().PropertiesAutowired();
             //builder.Register(c => CassandraDBRepository.Instance(ConfigReader.GetValue<string>("CASSANDRA_SERVER_NAME"), ConfigReader.GetValue<string>("CASSANDRA_KEYSPACE_NAME"))).As<IDBRepository>();
             builder.Register(c => new KafkaWrapper(ConfigReader.GetValue<string>("KafkaConnectionString"))).As<IMessangerWrapper>();
-            builder.Register(c => new DBRepository(this.AutofacContainer)).As<IDBRepository>();
+            //builder.Register(c => new DBRepository(ConfigReader.GetValue<string>("DapperConnectionString"))).As<IDBRepository>();
 
-            builder.Register(c => new ConnectionWrapper(this.AutofacContainer, ConfigReader.GetValue<string>("DapperConnectionString"))).As<IConnectionWrapper>();
-            builder.Register(c => new MessagePublisher(this.AutofacContainer)).As<IMessagePublisher>();
-
-            builder.Register(c => new PhonebookService(this.AutofacContainer)).As<IPhonebookService>();
+            builder.Register(c => new ConnectionWrapper(ConfigReader.GetValue<string>("DapperConnectionString"))).As<IConnectionWrapper>();
+            //builder.Register(c => new MessagePublisher(this.AutofacContainer)).As<IMessagePublisher>();
+            builder.RegisterType<MessagePublisher>().As<IMessagePublisher>();
+            builder.RegisterType<DBRepository>().As<IDBRepository>().WithParameter( new TypedParameter(typeof(string), ConfigReader.GetValue<string>("DapperConnectionString")) );
+            builder.RegisterType<PhonebookService>().As<IPhonebookService>().InstancePerLifetimeScope();
+            //builder.Register(c => new PhonebookService()).As<IPhonebookService>().InstancePerLifetimeScope();
         }
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
         public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
@@ -66,7 +68,7 @@ namespace phonebook_app
                 app.UseDeveloperExceptionPage();
             }
             // the codes to create the tables are in the dbrepository, this is here ONLY TO create the tables.
-            IDBRepository db = this.AutofacContainer.Resolve<IDBRepository>();
+            //IDBRepository db = this.AutofacContainer.Resolve<IDBRepository>();
             app.UseHttpsRedirection();
 
             app.UseRouting();

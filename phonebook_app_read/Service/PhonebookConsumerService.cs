@@ -29,25 +29,27 @@ namespace phonebook_app_read
         CancellationToken cancellationToken;
         IDBRepository db = null;
         IPhonebookElasticSearch elastic = null;
+        IMessangerWrapper messangerWrapper = null;
+        //private readonly ILifetimeScope container;
 
-        private readonly ILifetimeScope container;
-
-        public PhonebookConsumerService(ILifetimeScope container) 
+        public PhonebookConsumerService( IDBRepository dBRepository, IPhonebookElasticSearch phonebookElasticSearch, IMessangerWrapper messangerWrapper) 
         {
-            this.container = container;
+            //this.container = container;
             this.cancellationToken = new CancellationToken();
 
 
             this.kafkaHost = ConfigReader.GetValue<string>("KafkaHost");
             
             this.elasticPhonebookIndex = ConfigReader.GetValue<string>("ElasticPhonebookIndex");
-            this.db = this.container.Resolve<IDBRepository>();
-            this.elastic = this.container.Resolve<IPhonebookElasticSearch>();
+            this.db = dBRepository;
+            this.elastic = phonebookElasticSearch;
+            this.messangerWrapper = messangerWrapper;
         }
 
         private void TopicManager(string message)
         {
             WrapperModel<Phonebook> wrapperModel = JsonSerializer.Deserialize<WrapperModel<Phonebook>>(message);
+            Helper.Print("Received: " + message);
             if(wrapperModel.Action == "post")
             {
                 this.PhonebookPOST(wrapperModel.Child);
@@ -71,7 +73,7 @@ namespace phonebook_app_read
         }
         public void RegisterMethods()
         {
-            IMessangerWrapper messangerWrapper = this.container.Resolve<IMessangerWrapper>();
+            //IMessangerWrapper messangerWrapper = this.container.Resolve<IMessangerWrapper>();
             Dictionary<string, Action<string>> dict = new Dictionary<string, Action<string>>();
             dict[phonebookTopic] = this.TopicManager;
             messangerWrapper.Consume(this.kafkaGroup, dict, this.cancellationToken);

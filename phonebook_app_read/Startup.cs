@@ -50,19 +50,23 @@ namespace phonebook_app_read
             // If you want to set up a controller for, say, property injection
             // you can override the controller registration after populating services.
             builder.RegisterType<PhonebookController>().PropertiesAutowired();
-            builder.Register(c => CassandraDBRepository.Instance(this.AutofacContainer)).As<IDBRepository>();
+            builder.Register(c => 
+            {
+                return CassandraDBRepository.Instance(c.Resolve<ICassandraWrapper>());
+            }).As<IDBRepository>();
             builder.RegisterType<PhonebookReadService>().As<IPhonebookReadService>();
             builder.Register(c => PhonebookElasticSearch.Instance()).As<IPhonebookElasticSearch>();
             builder.RegisterType<PhonebookConsumerService>().As<IPhonebookConsumerService>();
             builder.Register(c => new KafkaWrapper(ConfigReader.GetValue<string>("KafkaHost"))).As<IMessangerWrapper>();
             builder.Register(c=> new CassandraWrapper(ConfigReader.GetValue<string>("CASSANDRA_SERVER_NAME"), ConfigReader.GetValue<string>("CASSANDRA_KEYSPACE_NAME"))).As<ICassandraWrapper>();
+            builder.RegisterType<PhonebookConsumerService>().As<IPhonebookConsumerService>();
         }
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
         public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
         {
             this.AutofacContainer = app.ApplicationServices.GetAutofacRoot();
 
-            Thread StaticCaller = new Thread(new ThreadStart((new PhonebookConsumerService(this.AutofacContainer)).RegisterMethods));
+            Thread StaticCaller = new Thread(new ThreadStart(( this.AutofacContainer.Resolve<IPhonebookConsumerService>() ).RegisterMethods));
             StaticCaller.Start();
             if (env.IsDevelopment())
             {

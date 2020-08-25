@@ -14,28 +14,18 @@ namespace phonebook_app.Persistence
 {
     public class DBRepository :IDBRepository
     {
-        NpgsqlConnection connection = null;
-        string _connectionString = "";
         IConnectionWrapper wrapper = null;
 
-        public DBRepository(ILifetimeScope container)
+        public DBRepository(string connectionString, IConnectionWrapper wrapper)
         {
-            if(this.connection == null)
+
+            this.wrapper = wrapper;
+#if DEBUG
+            if (!this.wrapper.TableExists("phonebook"))
             {
-                //Console.WriteLine("HELLO WORLD "+this._connectionString);
-                if (this.connection == null)
-                {
-                    this.connection = new NpgsqlConnection(this._connectionString);
-                    this.connection.Open();
-                }
-                #if DEBUG
-                    if (!wrapper.TableExists("phonebook"))
-                    {
-                        wrapper.CreateTable("CREATE TABLE phonebook(id text,name text,number text, PRIMARY KEY(id)); ");
-                    }
-                #endif
+                this.wrapper.CreateTable("CREATE TABLE phonebook(id text,name text,number text, PRIMARY KEY(id)); ");
             }
-            wrapper = container.Resolve<IConnectionWrapper>();
+#endif
         }
         public IEnumerable<Phonebook> GetAllPhonebooks(string query)
         {
@@ -60,10 +50,7 @@ namespace phonebook_app.Persistence
 
         ~DBRepository()
         {
-            if(this.connection != null)
-            {
-                this.connection.Close();
-            }
+
         }
     }
 }

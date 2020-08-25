@@ -8,11 +8,11 @@ namespace KafkaConnection.model
     {
         public string Action { get; set; }
         public string Type { get; set; }
-        public string CreatedAt;
-        public string UpdatedAt;
-        public string Publisher;
-        public string CreatedBy;
-        public string UpdatedBy;
+        public string CreatedAt { get; set; }
+        public string UpdatedAt { get; set; }
+        public string Publisher { get; set; }
+        public string CreatedBy { get; set; }
+        public string UpdatedBy { get; set; }
         public T Child { get; set; }
         public WrapperModel(){}
 

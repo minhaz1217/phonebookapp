@@ -5,7 +5,7 @@ using System.Threading.Tasks;
 
 namespace phonebook_app_read.Persistence
 {
-    interface IDBRepository : IPhonebookRepository, IPhonebookReadNameRepository
+    public interface IDBRepository : IPhonebookRepository, IPhonebookReadNameRepository
     {
     }
 }
